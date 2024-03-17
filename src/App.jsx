@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./Components/Navbar";
 import Body from "./Components/Body";
-import {
-  Route,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from "react-router-dom";
+import SingleDetails from "./Components/SingleDetails";
 
 function App() {
   return (
-    <>
+    // <AddItem />
+
+    <Router>
       <Navbar />
-      <Body />
-    </>
+      <Routes>
+        <Route path="/" element={<Body />} />
+        <Route path="/products/:id" element={<SingleDetails />} />
+      </Routes>
+    </Router>
   );
 }
 

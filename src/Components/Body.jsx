@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { RxDotFilled } from "react-icons/rx";
 import StoreItems from "./StoreItems";
-import SingleDetails from "./SingleDetails";
+import { Link } from "react-router-dom";
+import AddItem from "./AddItem";
 
 function Body(props) {
   let API = "https://fakestoreapi.com/products";
 
   const [products, setProducts] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const closeModal = () => setShowModal(false);
 
   const fetchApiData = async () => {
     try {
@@ -82,23 +85,33 @@ function Body(props) {
         </div>
       </div>
 
-      <div className=" flex flex-wrap justify-center">
+      <div className=" flex flex-wrap relative justify-center">
         {products &&
           products.map((element) => {
             return (
-              <StoreItems
-                key={element.id}
-                id={element.id}
-                image={element.image}
-                title={element.title ? element.title.slice(0, 36) : ""}
-                description={
-                  element.description ? element.description.slice(0, 88) : ""
-                }
-                rating={element.rating.rate}
-                price={element.price}
-              />
+              <Link key={element.id} to={`/products/${element.id}`}>
+                <StoreItems
+                  key={element.id}
+                  id={element.id}
+                  image={element.image}
+                  title={element.title ? element.title.slice(0, 36) : ""}
+                  description={
+                    element.description ? element.description.slice(0, 88) : ""
+                  }
+                  rating={element.rating.rate}
+                  price={element.price}
+                  url={element.url}
+                />
+              </Link>
             );
           })}
+        <button
+          onClick={() => setShowModal(true)}
+          className="  right-10 border-2 bg-blue-600 rounded-xl h-10"
+        >
+          Add Item
+        </button>
+        {showModal && <AddItem closeModal={closeModal} />}
       </div>
     </>
   );
