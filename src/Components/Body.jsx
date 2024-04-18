@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import { RxDotFilled } from "react-icons/rx";
 import StoreItems from "./StoreItems";
-import { Link } from "react-router-dom";
 import AddItem from "./AddItem";
+import { redirect, useNavigate } from "react-router-dom";
 
-function Body(props) {
-  let API = "https://fakestoreapi.com/products";
+function Body() {
+  const [limit, setLimit] = useState(6);
+
+  let API = `https://fakestoreapi.com/products?limit=${limit}`;
 
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
-
+  const navigate = useNavigate();
   const fetchApiData = async () => {
     try {
       const res = await fetch(API);
@@ -24,21 +26,25 @@ function Body(props) {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
     fetchApiData(API);
-  }, []);
+  }, [limit]);
 
   const slides = [
     {
-      url: "https://images.pexels.com/photos/3768005/pexels-photo-3768005.jpeg?cs=srgb&dl=pexels-willo-m-3768005.jpg&fm=jpg",
+      url: "https://clickamericana.com/wp-content/uploads/1965-dress-styles.jpg",
     },
     {
-      url: "https://blog.bozemancvb.com/hubfs/DSC_6505.jpeg",
+      url: "https://gjepc.org/solitaire/wp-content/uploads/2023/11/polki-1.jpg",
     },
     {
-      url: "https://media.timeout.com/images/100909731/image.jpg",
+      url: "https://media.istockphoto.com/id/1293366109/photo/this-one-match-perfect-with-me.jpg?s=612x612&w=0&k=20&c=wJ6yYbRrDfdmoViuQkX39s2z_0lCiNQYgEtLU--0EbY=",
     },
     {
-      url: "https://media.istockphoto.com/id/1338894509/photo/woman-choosing-a-new-style-for-herself.jpg?s=612x612&w=0&k=20&c=Ew11SGoTR-W4hO719So27fWOn9M8oRyFVQerofbBdr4=",
+      url: "https://www.dpreview.com/files/p/articles/8615681274/iPhone15-plus-pro4.jpeg",
     },
   ];
   const [currentIndex, setCurrentIndex] = useState(3);
@@ -59,9 +65,15 @@ function Body(props) {
     setCurrentIndex(slideIndex);
   };
 
+  const handleMoreButton = () => {
+    setLimit(limit + 3);
+  };
+
+  const isAllItemsLoaded = limit === products.length;
+
   return (
     <>
-      <div className=" max-w-[1400px] h-[480px] w-full m-auto py-16 px-4 relative group">
+      <div className="max-w-[1400px] h-[480px] w-full m-auto py-16 px-4 relative group ">
         <div
           style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
           className=" w-full h-full rounded-2xl bg-cover duration-500"
@@ -89,25 +101,32 @@ function Body(props) {
         {products &&
           products.map((element) => {
             return (
-              <Link key={element.id} to={`/products/${element.id}`}>
-                <StoreItems
-                  key={element.id}
-                  id={element.id}
-                  image={element.image}
-                  title={element.title ? element.title.slice(0, 36) : ""}
-                  description={
-                    element.description ? element.description.slice(0, 88) : ""
-                  }
-                  rating={element.rating.rate}
-                  price={element.price}
-                  url={element.url}
-                />
-              </Link>
+              <StoreItems
+                key={element.id}
+                id={element.id}
+                image={element.image}
+                title={element.title ? element.title.slice(0, 36) : ""}
+                description={
+                  element.description ? element.description.slice(0, 88) : ""
+                }
+                rating={element.rating.rate}
+                price={element.price}
+                url={element.url}
+              />
             );
           })}
+      </div>
+      <div>
+        <button
+          onClick={handleMoreButton}
+          className=" bg-green-300 rounded-md px-2 mx-4 h-10 disabled:bg-gray-200 disabled:text-gray-300"
+          disabled={!isAllItemsLoaded}
+        >
+          More Items
+        </button>
         <button
           onClick={() => setShowModal(true)}
-          className="  right-10 border-2 bg-blue-600 rounded-xl h-10"
+          className="  right-10 border-2 bg-cyan-600 rounded-md h-10"
         >
           Add Item
         </button>
