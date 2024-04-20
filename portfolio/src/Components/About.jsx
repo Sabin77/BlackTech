@@ -30,13 +30,32 @@ function About() {
         </div>
         <div className="child2 flex flex-col flex-1 border-2 m-2">
           <h1 className="self-center text-2xl font-bold">My Skills</h1>
-          <button>HTML</button>CSS<button>JavaScript</button>Wordpress
-          <button>PHP</button>
-          <button>SASS</button>
-          <button>Git</button>
-          <button>SEO</button>
-          <button>Terminal</button>
-          <button>Video Editing</button>
+          <div className=" flex flex-wrap my-4 justify-center">
+            <button className=" border-2 border-gray-400 px-3 h-10 rounded-md mx-1 my-1 ">
+              HTML
+            </button>
+            <button className=" border-2 border-gray-400 px-3 h-10 rounded-md mx-1 my-1">
+              CSS
+            </button>
+            <button className=" border-2 border-gray-400 px-3 h-10 rounded-md mx-1 my-1">
+              JavaScript
+            </button>
+            <button className=" border-2 border-gray-400 px-3 h-10 rounded-md mx-1 my-1">
+              Wordpress
+            </button>
+            <button className=" border-2 border-gray-400 px-3 h-10 rounded-md mx-1 my-1">
+              PHP
+            </button>
+            <button className=" border-2 border-gray-400 px-3 h-10 rounded-md mx-1 my-1">
+              Git
+            </button>
+            <button className=" border-2 border-gray-400 px-3 h-10 rounded-md mx-1 my-1">
+              Terminal
+            </button>
+            <button className=" border-2 border-gray-400 px-3 h-10 rounded-md mx-1 my-1">
+              Video Editing
+            </button>
+          </div>
         </div>
       </div>
     </div>
