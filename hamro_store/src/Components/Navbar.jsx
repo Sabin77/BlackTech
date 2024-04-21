@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-//Hamro store//
+//development ->hamro store
 
 function Navbar() {
   const [dropdown, setDropdown] = useState(false);
