@@ -1,12 +1,15 @@
 import React from "react";
 import Project1 from "../assets/projectphoto.jpg";
 import Project2 from "../assets/project2.avif";
-import Project3 from "../assets/project3.avif";
+import Project3 from "../assets/project4.png";
 
 function Projects() {
   return (
-    <div className="MainContainer flex flex-col justify-center">
-      <div className="flex flex-col w-1/2 border-2 self-center">
+    <div
+      className="MainContainer flex flex-col justify-center border-b-2 border-gray-700 pt-20"
+      id="projects"
+    >
+      <div className="flex flex-col mt-5  w-3/4 self-center md:w-1/2">
         <h1 className="Title text-4xl self-center pt-5 pb-2 font-bold border-b-4 ">
           My Projects
         </h1>
@@ -15,9 +18,9 @@ function Projects() {
           created with each project containing its own case study
         </p>
       </div>
-      <div className="parent flex border-2 my-10 h-[30rem] ">
-        <div className="child1 flex flex-col flex-1 border-2 m-2 px-20 items-center justify-center">
-          <div className=" w-full h-80  border-2 shadow-md shadow-slate-500">
+      <div className="parent   my-10 md:h-[25rem] md:flex ">
+        <div className="child1 flex flex-col flex-1  m-2 px-20 items-center justify-center">
+          <div className=" w-full h-80  border-2 border-gray-700 shadow-md shadow-slate-500">
             <img
               className=" h-full w-full"
               src={Project1}
@@ -25,8 +28,8 @@ function Projects() {
             />
           </div>
         </div>
-        <div className="child2 flex flex-col flex-1 border-2 m-2 justify-center">
-          <h1 className=" text-2xl font-bold mx-10">Project 1</h1>
+        <div className="child2 flex flex-col flex-1 m-2 justify-center pt-4 ">
+          <h1 className=" text-2xl font-bold mx-14">Project 1</h1>
           <p className=" text-center py-3 text-xl mx-4 text-pretty">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia
             delectus doloremque totam fugiat fuga perspiciatis quis odit at id
@@ -38,9 +41,9 @@ function Projects() {
           </button>
         </div>
       </div>
-      <div className="parent flex border-2 h-[30rem] ">
-        <div className="child1 flex flex-col flex-1 border-2 m-2 px-20 items-center justify-center">
-          <div className=" w-full h-80  border-2 shadow-md shadow-slate-500">
+      <div className="parent   my-10 md:h-[30rem] md:flex">
+        <div className="child1 flex flex-col flex-1  m-2 px-20 items-center justify-center">
+          <div className=" w-full h-80  border-2 border-gray-700 shadow-md shadow-slate-500">
             <img
               className=" h-full w-full"
               src={Project2}
@@ -48,8 +51,8 @@ function Projects() {
             />
           </div>
         </div>
-        <div className="child2 flex flex-col flex-1 border-2 m-2 justify-center">
-          <h1 className=" text-2xl font-bold mx-10">Project 2</h1>
+        <div className="child2 flex flex-col flex-1 m-2 justify-center pt-4">
+          <h1 className=" text-2xl font-bold mx-14">Project 2</h1>
           <p className=" text-center py-3 text-xl mx-4 text-pretty">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia
             delectus doloremque totam fugiat fuga perspiciatis quis odit at id
@@ -61,9 +64,9 @@ function Projects() {
           </button>
         </div>
       </div>
-      <div className="parent flex border-2 my-10 h-[30rem] ">
-        <div className="child1 flex flex-col flex-1 border-2 m-2 px-20 items-center justify-center">
-          <div className=" w-full h-80  border-2 shadow-md shadow-slate-500">
+      <div className="parent   my-10 md:h-[30rem] md:flex">
+        <div className="child1 flex flex-col flex-1  m-2 px-20 items-center justify-center">
+          <div className=" w-full h-80  border-2 border-gray-700 shadow-md shadow-slate-500">
             <img
               className=" h-full w-full"
               src={Project3}
@@ -71,8 +74,8 @@ function Projects() {
             />
           </div>
         </div>
-        <div className="child2 flex flex-col flex-1 border-2 m-2 justify-center">
-          <h1 className=" text-2xl font-bold mx-10">Project 3</h1>
+        <div className="child2 flex flex-col flex-1  m-2 justify-center pt-4">
+          <h1 className=" text-2xl font-bold mx-14">Project 3</h1>
           <p className=" text-center py-3 text-xl mx-4 text-pretty">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia
             delectus doloremque totam fugiat fuga perspiciatis quis odit at id

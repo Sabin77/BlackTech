@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Body from "./Components/Body";
 import About from "./Components/About";
@@ -11,12 +10,11 @@ function App() {
     <>
       <Router>
         <Navbar />
-        <Routes>
-          {/* <Route path="/" element={<Body />}></Route> */}
-          {/* <Route path="/" element={<About />}></Route> */}
-          {/* <Route path="/" element={<Projects />}></Route> */}
-          <Route path="/" element={<Contact />}></Route>
-        </Routes>
+
+        <Body />
+        <About />
+        <Projects />
+        <Contact />
       </Router>
     </>
   );

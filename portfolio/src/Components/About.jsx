@@ -2,8 +2,11 @@ import React from "react";
 
 function About() {
   return (
-    <div className="flex flex-col justify-center ">
-      <div className="flex flex-col w-1/2 border-2 self-center ">
+    <div
+      className="flex flex-col justify-center border-b-2 border-gray-700 pt-20 "
+      id="about"
+    >
+      <div className="flex flex-col w-3/4  self-center md:w-1/2 ">
         <h1 className=" text-4xl self-center pt-5 pb-2 font-bold border-b-4 ">
           About Me
         </h1>
@@ -12,10 +15,12 @@ function About() {
           current skills mostly in terms of programming and technology
         </p>
       </div>
-      <div className="parent flex border-2 my-10">
-        <div className="child1 flex flex-col flex-1 border-2 m-2 px-20">
-          <h1 className=" self-center text-2xl font-bold">Get to know me!</h1>
-          <p className=" text-xl px-10">
+      <div className="parent   my-10 md:flex">
+        <div className="child1 flex flex-col flex-1 m-2 pt-4 px-2  md:px-20">
+          <h1 className=" self-center text-2xl font-bold p-4">
+            Get to know me!
+          </h1>
+          <p className=" text-xl px-1 md:px-10">
             I'm a Frontend Focused Web Developer building and managing the
             Front-end of Websites and Web Applications that leads to the success
             of the overall product. Check out some of my work in the Projects
@@ -28,9 +33,9 @@ function About() {
             matches my skills and experience then don't hesitate to contact me.
           </p>
         </div>
-        <div className="child2 flex flex-col flex-1 border-2 m-2">
+        <div className="child2 flex flex-col flex-1 py-5 mt-4 m-2">
           <h1 className="self-center text-2xl font-bold">My Skills</h1>
-          <div className=" flex flex-wrap my-4 justify-center">
+          <div className=" flex flex-wrap my-4 pt-4 justify-center">
             <button className=" border-2 border-gray-400 px-3 h-10 rounded-md mx-1 my-1 ">
               HTML
             </button>

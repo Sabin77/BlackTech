@@ -4,10 +4,13 @@ import bg from "../assets/contactbg.jpg";
 function Contact() {
   return (
     <>
-      <div className="MainContainer  flex  h-screen items-center ">
+      <div
+        className="MainContainer  flex  h-screen items-center  "
+        id="contact"
+      >
         <img className="h-full w-full" src={bg} alt="bg-image" />
-        <div className="absolute flex flex-col items-center h-full w-full z-10">
-          <div className=" flex flex-col w-1/2  self-center">
+        <div className="absolute flex flex-col items-center h-full w-full z-10 pt-20">
+          <div className=" flex flex-col w-3/4  self-center md:w-1/2">
             <h1 className="Title text-4xl self-center pt-5 pb-2 font-bold border-b-4 ">
               Contact
             </h1>
@@ -16,7 +19,7 @@ function Contact() {
               get back to you as soon as possible
             </p>
           </div>
-          <div className=" messageContainer flex flex-col h-auto w-1/2 border-2 mt-10">
+          <div className=" messageContainer flex flex-col w-3/4 backdrop-blur-sm h-auto border-2 mt-10 md:w-1/2 ">
             <div className=" flex flex-col my-4 px-16">
               <h1 className=" font-bold my-2">Name</h1>
               <input

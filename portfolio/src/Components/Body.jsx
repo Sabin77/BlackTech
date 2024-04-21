@@ -1,19 +1,24 @@
 import React from "react";
-import bg from "../assets/background.png";
+import bg from "../assets/background.jpg";
 
 function Body() {
   return (
-    <div className="flex relative h-screen items-center justify-center ">
+    <div
+      className="flex relative h-screen  items-center justify-center mt-20 "
+      id="body"
+    >
       <img className="h-full w-full" src={bg} alt="bg-image" />
-      <div className="flex absolute h-full w-full top-48 justify-center">
-        <div className="flex flex-col absolute  w-1/2 ">
-          <h1 className=" text-6xl self-center">Hey,I'm Suraj Gautam</h1>
-          <p className="m-5 p-5 text-center text-lg">
+      <div className="flex absolute h-full w-full top-20  justify-center md:top-40">
+        <div className="flex flex-col absolute w-3/4 h-auto ml-8  md:w-1/2 ">
+          <h1 className=" text-6xl ml-3 md:self-center">
+            Hey,I'm Suraj Gautam
+          </h1>
+          <p className="m-5 p-5 text-center text-lg ">
             A Result-Oriented Web Developer building and managing Websites and
             Web Applications that leads to the success of the overall product
           </p>
 
-          <button className=" border-2 border-gray-100 w-40 self-center py-2 rounded-lg hover:bg-gray-600 animate-bounce">
+          <button className=" border-2 border-gray-100 w-40 mt-32 self-center py-2 rounded-lg hover:bg-gray-600 animate-bounce md:mt-0">
             Projects
           </button>
         </div>
