@@ -4,6 +4,7 @@ import { useState } from "react";
 import { HiBars3BottomRight } from "react-icons/hi2";
 import { GiCrossedBones } from "react-icons/gi";
 import MenuOverlay from "./MenuOverlay";
+//hamro store setup
 
 function Navbar() {
   const [toggle, setToggle] = useState(false);
