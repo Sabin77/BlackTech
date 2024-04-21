@@ -14,7 +14,7 @@ import Register from "./Components/Register";
 import ProfileDetails from "./Components/ProfileDetails";
 import AboutUs from "./Components/AboutUs";
 import ContactUs from "./Components/ContactUs";
-
+//.
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);

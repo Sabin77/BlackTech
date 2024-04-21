@@ -11,7 +11,7 @@ function Navbar() {
 
   return (
     <>
-      <div className="relative bg-[#4A3BB5] ">
+      <div className="sticky top-0 bg-[#4A3BB5] z-20 ">
         <Link to={"/"}>
           {" "}
           <span className=" absolute left-10 bottom-4 text-xl font-bold">
