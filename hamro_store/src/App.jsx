@@ -45,51 +45,51 @@ function App() {
             <Route path="/" element={<Body />} exact />
             <Route path="/products/:id" element={<SingleDetails />} />
             <Route path="/carts" element={<Cart />} />
-          </Route>
 
-          <Route
-            path="/category/jewelery"
-            element={
-              <Category
-                key={"jewelery"}
-                category="category"
-                categoryType="jewelery"
-              />
-            }
-          />
-          <Route
-            path="/category/electronics"
-            element={
-              <Category
-                key={"electronics"}
-                category="category"
-                categoryType="electronics"
-              />
-            }
-          />
-          <Route
-            path="/category/men's clothing"
-            element={
-              <Category
-                key={"MensClothing"}
-                category="category"
-                categoryType="men's clothing"
-              />
-            }
-          />
-          <Route
-            path="/category/women's clothing"
-            element={
-              <Category
-                key={"WomensClothing"}
-                category="category"
-                categoryType="women's clothing"
-              />
-            }
-          />
-          <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/contact-us" element={<ContactUs />}></Route>
-          <Route path="/profile" element={<ProfileDetails />} />
+            <Route
+              path="/category/jewelery"
+              element={
+                <Category
+                  key={"jewelery"}
+                  category="category"
+                  categoryType="jewelery"
+                />
+              }
+            />
+            <Route
+              path="/category/electronics"
+              element={
+                <Category
+                  key={"electronics"}
+                  category="category"
+                  categoryType="electronics"
+                />
+              }
+            />
+            <Route
+              path="/category/men's clothing"
+              element={
+                <Category
+                  key={"MensClothing"}
+                  category="category"
+                  categoryType="men's clothing"
+                />
+              }
+            />
+            <Route
+              path="/category/women's clothing"
+              element={
+                <Category
+                  key={"WomensClothing"}
+                  category="category"
+                  categoryType="women's clothing"
+                />
+              }
+            />
+            <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/contact-us" element={<ContactUs />}></Route>
+            <Route path="/profile" element={<ProfileDetails />} />
+          </Route>
         </>
       </Routes>
       <Footer />

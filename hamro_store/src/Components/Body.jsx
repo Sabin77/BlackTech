@@ -14,6 +14,7 @@ function Body() {
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
   const navigate = useNavigate();
+
   const fetchApiData = async () => {
     try {
       const res = await fetch(API);

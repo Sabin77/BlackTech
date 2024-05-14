@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import bgImage from "../assets/login-bg.png";
 import { FaUser } from "react-icons/fa";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+
 import { useNavigate } from "react-router-dom";
 import { MdEmail } from "react-icons/md";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import { Navigate } from "react-router-dom";
 
 function Register() {
   const [formvalue, setFormvalue] = useState({

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 function StoreItems(props) {
   const { title, description, url, id, image, rating, price } = props;
+
   const handleDelete = async () => {
     const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
       method: "DELETE",
