@@ -35,6 +35,8 @@ function AddPostModal({ closeModal }) {
   const handlePost = async () => {
     try {
       const token = localStorage.getItem("token");
+      const userID = localStorage.getItem("userID");
+      console.log(userID);
 
       const formdata = new FormData();
       formdata.append("title", formData.title);
@@ -42,8 +44,10 @@ function AddPostModal({ closeModal }) {
       formdata.append("category", formData.category);
       formdata.append("amount", formData.amount);
       formdata.append("image", image);
+      formdata.append("userid", userID);
 
-      console.log(token);
+      console.log(formdata);
+
       const response = await axios.post(
         "http://192.168.1.105:8000/api/post/addPost",
 
@@ -54,6 +58,10 @@ function AddPostModal({ closeModal }) {
           },
         }
       );
+      console.log(response.data);
+      if (response.data) {
+        window.location.reload();
+      }
       console.log(response.data);
     } catch (error) {
       console.log("Error while posting");

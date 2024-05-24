@@ -1,0 +1,51 @@
+#root {
+   color: #5FBF8F;
+   
+  /* background-color: #F1FFF8; */
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+
+  from,
+  to {
+    border-color: transparent;
+  }
+
+  50% {
+    border-color: black;
+  }
+}
+
+.typing-text {
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 0.15em solid black;
+  /* Adjust the caret color */
+  font-size: 2em;
+  /* Adjust the font size */
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+.text-container {
+  position: absolute;
+  top: 20px;
+  /* Adjust as needed */
+  left: 20px;
+  /* Adjust as needed */
+  z-index: 10;
+  color: white;
+  /* Adjust text color if needed */
+  font-family: monospace;
+  /* Adjust font family */
+}
+

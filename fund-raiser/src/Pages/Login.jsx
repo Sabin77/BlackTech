@@ -43,6 +43,7 @@ function Login() {
           }
         );
         console.log(response);
+        localStorage.setItem("userID", response.data.user._id);
 
         const token = response.data.token;
 
@@ -63,14 +64,14 @@ function Login() {
 
   const validate = (values) => {
     const errors = {};
-    setFormErrors(errors);
+
     if (!values.email) {
-      errors.username = "UserName must not be empty !";
+      errors.email = "Email must not be empty !";
     }
     if (!values.password) {
       errors.password = " Password must not be empty !";
     }
-    setFormErrors(errors);
+
     return errors;
   };
 
@@ -104,6 +105,8 @@ function Login() {
             />
             <FaUser className=" absolute top-6 right-16 " />
           </div>
+          <p className=" text-red-500 text-center">{formErrors.email}</p>
+
           <div className=" relative h-14 mt-6">
             <input
               className=" absolute bottom-1 right-12 border-2 h-10 w-3/4 rounded-3xl mt-10"
@@ -117,6 +120,8 @@ function Login() {
             />
             <RiLockPasswordFill className=" absolute top-6 right-16 " />
           </div>
+          <p className=" text-red-500 text-center">{formErrors.password}</p>
+
           <div className=" flex justify-center">
             <button
               type="button"

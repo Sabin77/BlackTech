@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import bg from "../assets/background.jpg";
 import AddPostModal from "./AddPostModal";
 import Posts from "./Posts";
+import axios from "axios";
 
 const Home = () => {
   const [openModal, setOpenModal] = useState(false);
   const closeModal = () => setOpenModal(false);
   const [posts, setPosts] = useState([]);
 
-  const fetchApiData = async () => {
+  const handlePosts = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.1.105:8000/api/auth/login"
+        "http://192.168.1.105:8000/api/post/getposts/66388a6f98e85c17b8d128ffg"
       );
-      setPosts(response.data);
-      console.log(posts);
+      setPosts(response.data.posts);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.log("Error while getting data");
     }
   };
+
+  useEffect(() => {
+    handlePosts();
+  }, []);
+
   return (
     <div className="flex flex-col ">
       <div className="flex relative justify-center h-[600px] ">
@@ -54,8 +59,19 @@ const Home = () => {
         </div>
       </div>
 
-      <div className=" grid grid-cols-1 border-2 md:grid-cols-2 lg:grid-cols-3 ">
-        <Posts />
+      <div className=" flex flex-wrap justify-center  px-10  gap-x-10 bg-black ">
+        {posts.map((post) => (
+          <Posts
+            key={post._id}
+            id={post._id}
+            title={post.title}
+            description={post.description}
+            category={post.category}
+            amount={post.amount}
+            likes={post.likes}
+            comments={post.comment.length}
+          />
+        ))}
       </div>
     </div>
   );

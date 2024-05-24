@@ -2,45 +2,60 @@ import React, { useEffect, useState } from "react";
 import { FaRegComment } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
 import poor from "../assets/poor.jpg";
-import axios from "axios";
+import { Link } from "react-router-dom";
+import { AiFillLike } from "react-icons/ai";
 
-function Posts() {
-  const [posts, setPost] = useState([]);
+function Posts(props) {
+  const { id, title, description, category, amount, likes, comments } = props;
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(999);
+  localStorage.setItem("likeCount", likeCount);
 
-  // const handlePosts = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       "http://localhost:8000/api/post/getpost"
-  //     );
-  //     setPost(response.data);
-  //   } catch (error) {
-  //     console.log("Error while getting data");
-  //   }
-  // };
+  // const [title, setTitle] = useState("Title");
+  // const [description, setDescription] = useState("Description");
+  // const [likes, setLikes] = useState("999");
+  // const [comments, setComments] = useState("999");
 
-  // useEffect(() => {
-  //   handlePosts();
-  // }, []);
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    if (!isLiked) {
+      setLikeCount(likeCount + 1);
+    } else {
+      setLikeCount(likeCount - 1);
+    }
+  };
 
   return (
-    <div>
-      {/* {posts.map((post) => ( */}
-      <div className=" w-96  h-[500px] shadow-md my-4 mx-2">
-        <div className=" h-1/2 border-2 ">
-          <img src={poor} alt="" />
+    <div className=" mb-8">
+      <div
+        key={id}
+        className=" w-96  h-[500px] shadow-md shadow-white my-4 mx-2 bg-white"
+      >
+        <Link to={`/posts/${id}`}>
+          <div className=" h-1/2 border-2 ">
+            <img src={poor} alt="" />
+          </div>
+        </Link>
+        <div className="  h-14 text-2xl mx-3 mt-2">
+          <p> {title ? title : "Title"} </p>
         </div>
-        <div className="  h-14 text-2xl">
-          <p> Title </p>
+        <div className="  h-36 mx-3 ">
+          <p className=" break-words">
+            {description ? description.slice(0, 150) : "No description"}
+          </p>
         </div>
-        <div className="  h-36 ">
-          <p>Description</p>
-        </div>
-        <div className=" flex">
-          <div className=" flex  rounded-2xl border-2  w-auto pl-2">
-            <p className=" py-1 px-2">
-              <AiOutlineLike className=" text-2xl" />
+        <div className=" flex px-2">
+          <div
+            onClick={handleLike}
+            className={` flex  rounded-2xl border-2  w-auto pl-2  ${
+              isLiked ? "bg-slate-400" : " "
+            } `}
+          >
+            <p className=" py-1 px-2 text-2xl">
+              {isLiked ? <AiFillLike /> : <AiOutlineLike />}
             </p>
-            <p className=" py-1 px-2">999</p>
+
+            <p className=" py-1 px-2">{likeCount}</p>
           </div>
           <div className=" flex  rounded-2xl border-2 w-auto pl-2 mx-3">
             <p className=" pt-1 px-2">
@@ -50,7 +65,6 @@ function Posts() {
           </div>
         </div>
       </div>
-      {/* ))} */}
     </div>
   );
 }

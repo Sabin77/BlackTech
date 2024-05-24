@@ -19,7 +19,6 @@ function Register() {
   });
   const [formErrors, setFormErrors] = useState({});
   const [showAlert, setShowAlert] = useState(false);
-  const navigate = useNavigate();
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -28,6 +27,7 @@ function Register() {
   };
 
   const handleRegister = async () => {
+    const navigate = useNavigate();
     try {
       formdata.append("email", formvalue.email);
       formdata.append("password", formvalue.password);

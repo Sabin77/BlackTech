@@ -6,19 +6,21 @@ import { FaRegComment } from "react-icons/fa";
 import { AiOutlineLike } from "react-icons/ai";
 
 function PostDetails() {
-  const [item, setItem] = useState(null);
+  const [item, setItem] = useState({});
   const { id } = useParams();
   const [openComment, setOpenComment] = useState(false);
+
+  console.log(id);
 
   useEffect(() => {
     const getPost = async () => {
       const respose = await axios.get(
-        "http://192.168.1.105:8000/api/post/getpostby-id",
-        {
-          id,
-        }
+        `http://192.168.1.105:8000/api/post/getpost/${id}`
       );
+      setItem(respose.data.post);
+      console.log(item);
     };
+    getPost();
   }, [id]);
 
   return (
@@ -27,24 +29,15 @@ function PostDetails() {
         <img className=" w-full " src={poor} alt="Post picture" />
 
         <div className=" h-28 border-2 text-3xl font-poetsen py-4 px-5">
-          This is a title of the post. The title might be long.
+          {item.title ? item.title : "Title"}
         </div>
 
         <div className="min-h-60 font-serif px-6">
-          {" "}
-          This is the description. Lorem, ipsum dolor sit amet consectetur
-          adipisicing elit. Quasi perspiciatis nisi, debitis deleniti, nesciunt
-          sapiente vero adipisci distinctio reprehenderit omnis beatae similique
-          quia possimus alias amet sit esse aut aliquid! Amet earum non
-          reiciendis! Eveniet eius doloremque in dolorem minus facilis provident
-          amet, quos accusamus ea repellendus animi totam error perferendis vel
-          facere molestiae. Doloremque suscipit quasi aliquid consequatur amet?
-          Ad, incidunt reiciendis illo facilis, inventore nihil, magni
-          exercitationem tempore fugiat similique eveniet ipsa illum nulla quis.
-          Veniam delectus tempora sed, deserunt laudantium, quis alias pariatur
-          ad molestiae a dolores!
+          {item.description
+            ? item.description
+            : "This is the description. Lorem, ipsum dolor sit amet consecteturadipisicing elit. Quasi perspiciatis nisi, debitis deleniti, nesciunt"}
         </div>
-        <div className="likes_and_comments_div  flex h-20 border-2">
+        <div className="likes_and_comments_div  flex h-20 border-2 items-center px-6">
           <div className=" flex  rounded-2xl border-2 h-10  w-auto pl-2 cursor-pointer">
             <p className=" py-1 px-2">
               <AiOutlineLike className=" text-2xl" />
