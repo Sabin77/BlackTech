@@ -54,6 +54,7 @@ export default function Todo() {
   //function to handle task completion
   const handleTaskCompletion = (index) => {
     const updatedList = [...list];
+    console.log(updatedList[index]);
     updatedList[index].completed = !updatedList[index].completed;
     setList(updatedList);
   };
@@ -61,6 +62,7 @@ export default function Todo() {
   const handleEditList = (index) => {
     setEditingIndex(index);
     setEditedTask(list[index]);
+    console.log(list[index]);
   };
 
   const handleSaveList = () => {

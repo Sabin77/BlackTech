@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 function StoreItems(props) {
   const { title, description, url, id, image, rating, price } = props;
+
   const handleDelete = async () => {
     const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
       method: "DELETE",
@@ -28,7 +29,7 @@ function StoreItems(props) {
   };
 
   return (
-    <div className="item group border-2 rounded-lg h-72 w-52 shadow-lg border-gray-200 mx-4 my-4 mb-7 bg-white">
+    <div className=" border-2 rounded-lg h-72 w-52 shadow-lg border-gray-200 mx-4 my-4 mb-7 bg-white">
       <Link key={id} to={`/products/${id}`}>
         <img
           src={
@@ -47,7 +48,7 @@ function StoreItems(props) {
           return (
             <span
               key={star}
-              className="start"
+              className="start "
               style={{
                 cursor: "pointer",
                 color: rating >= star ? "gold" : "gray",

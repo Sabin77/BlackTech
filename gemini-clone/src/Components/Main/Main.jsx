@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import "./Main.css";
-import Sidebar from "../Sidebar/Sidebar";
 import { assets } from "../../assets/assets";
 import { Context } from "../../context/Context";
 
