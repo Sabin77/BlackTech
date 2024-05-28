@@ -8,16 +8,15 @@ import {
   createRoutesFromElements,
   RouterProvider,
 } from "react-router-dom";
-import Home from "./pages/Home.jsx";
-import About from "./pages/About.jsx";
-import ContactUs from "./pages/ContactUs.jsx";
-import OurProducts from "./pages/OurProducts.jsx";
+
 import Login from "./pages/Login.jsx";
 import Layout from "./Layout.jsx";
 import Register from "./pages/Register.jsx";
 import { Auth0Provider } from "@auth0/auth0-react";
 import ProductLists from "./pages/ProductLists.jsx";
 import Cart from "./pages/Cart.jsx";
+import { Provider } from "react-redux";
+import { store } from "./components/State/Store.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,6 +38,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       redirect_uri: window.location.origin,
     }}
   >
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </Auth0Provider>
 );

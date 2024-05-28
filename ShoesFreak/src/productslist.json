@@ -1,0 +1,29 @@
+[{
+    "id": 1,
+    "title": "Sneakers",
+    "original_price":11999,
+    "discounted_price":9999,
+    "rating":4
+    
+},
+{
+    "id": 2,
+    "title": "Loafers",
+    "original_price":8000,
+    "discounted_price":6999,
+    "rating":3
+},
+{
+    "id": 3,
+    "title": "Boat Shoes",
+    "original_price":10000,
+    "discounted_price":7999,
+    "rating":5
+},
+{
+    "id": 4,
+    "title": "Espadrilles",
+    "original_price":5000,
+    "discounted_price":4599,
+    "rating":3.5
+}]

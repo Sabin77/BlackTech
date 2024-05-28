@@ -12,9 +12,9 @@ function ContactUs() {
       <form
         action="https://formspree.io/f/mgegbvpl"
         method="POST"
-        className=" flex flex-col w-full items-center border-2 mt-10 font-josefin text-[#458D69]"
+        className=" flex flex-col w-full items-center  mt-10 font-josefin text-[#458D69]"
       >
-        <div className=" flex flex-col w-60 md:flex-row md:w-fit  xl:w-1/3 border-2 ">
+        <div className=" flex flex-col w-60 md:flex-row md:w-fit  xl:w-1/3  ">
           <div className=" flex flex-col flex-1 m-2 space-y-2">
             <label> First Name</label>
 

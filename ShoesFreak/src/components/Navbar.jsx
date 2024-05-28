@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import data from "../templatedata.json";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoMdHeart } from "react-icons/io";
@@ -17,8 +18,16 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { useAuth0 } from "@auth0/auth0-react";
+import SearchBar from "./SearchBar";
+import { open } from "./State/Slice/CheckOutSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Navbar() {
+  const dispatch = useDispatch();
+  const { amount } = useSelector((state) => state.cart);
+  const [searchTerm, setSearchTerm] = useState("");
+  console.log(searchTerm);
+
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   const location = useLocation();
 
@@ -36,14 +45,11 @@ function Navbar() {
             ShoesFreak
           </span>
         </Link>
-        <div className="hidden justify-center mt-1 flex-1  sm:flex mx-5 ">
-          <ReactSearchBox
-            className=" "
-            placeholder="Search shoes"
-            value="Doe"
-          />
+        <div className="hidden relative justify-center  mt-1 flex-1  sm:flex mx-5 text-gray-500 ">
+          <SearchBar data={data} />
         </div>
       </div>
+
       {isHomePage && (
         <div className="hidden  lg:flex items-center flex-1  justify-center">
           <ul className=" flex text-lg font-playfair space-x-16 ">
@@ -114,14 +120,17 @@ function Navbar() {
       <div className="hidden lg:flex flex-1 ">
         <div className=" flex items-center flex-1 justify-center ">
           <IoMdHeart className=" text-xl mx-4 text-red-500 cursor-pointer" />
-          <Link to="/cart">
-            <div className=" flex justify-center items-center w-10 h-10  text-xl cursor-pointer">
-              <FiShoppingCart />
-              <div className="flex self-start justify-center items-center rounded-full bg-red-400 w-5 h-5 ">
-                <p className=" text-white text-sm">99</p>
-              </div>
+          {/* <Link to="/cart"> */}
+          <div
+            className=" flex justify-center items-center w-10 h-10  text-xl cursor-pointer"
+            onClick={() => dispatch(open())}
+          >
+            <FiShoppingCart />
+            <div className="flex self-start justify-center items-center rounded-full bg-red-400 w-5 h-5 ">
+              <p className=" text-white text-sm">{amount}</p>
             </div>
-          </Link>
+          </div>
+          {/* </Link> */}
         </div>
         <div className=" flex items-center flex-1 justify-center font-playfair ">
           {isAuthenticated ? (
