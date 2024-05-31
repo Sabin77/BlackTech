@@ -1,39 +1,63 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { auth, db } from "@/config/Config";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 function Login() {
+  const navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [errorMsg, setErrorMsg] = useState();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserDetails({ ...userDetails, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { email, password } = userDetails;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setUserDetails({
+        email: "",
+        password: "",
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    } catch (error) {
+      setErrorMsg(error.message);
+    }
+  };
   return (
     <div className="flex justify-center ">
       <div className="flex  w-[1000px] h-[500px] my-10 border-2 rounded-3xl">
         <div className="flex justify-center w-[600px] ">
           <div className=" w-2/3  ">
             <h1 className=" text-4xl font-poetsen text-center my-4"> LOGIN</h1>
-            <div className=" flex flex-col flex-1 m-2 space-y-4 mt-10">
-              <label> First Name</label>
-
-              <input
-                type="text"
-                name="first-name"
-                className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
-                required
-              />
-
+            <form
+              className=" flex flex-col flex-1 m-2 space-y-4 mt-10"
+              onSubmit={handleSubmit}
+            >
               <label> Email</label>
               <input
                 type="email"
-                name="Email"
+                name="email"
+                value={userDetails.email}
+                onChange={handleChange}
                 className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
                 required
               />
-              <label>Phone</label>
-              <input
-                name="phone"
-                type="number"
-                className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
-              />
+
               <label> Password</label>
               <input
                 type="password"
+                name="password"
+                value={userDetails.password}
+                onChange={handleChange}
                 className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
               />
 
@@ -41,7 +65,12 @@ function Login() {
                 {" "}
                 LOG IN
               </button>
-            </div>
+              {errorMsg && (
+                <>
+                  <div className=" text-red-500 mt-2">{errorMsg}</div>
+                </>
+              )}
+            </form>
           </div>
         </div>
         <div className=" w-[400px]  rounded-r-3xl text-white bg-[#5FBF8F]">

@@ -8,9 +8,9 @@ function ProductLists() {
   //   const [rating, setRating] = useState(0);
 
   return (
-    <div className=" flex">
+    <div className=" flex ">
       {/* <div className=" w-1/6 h-lvh border-2"> Shoes Lists </div> */}
-      <Sidebar>
+      <Sidebar className=" hidden text-gray-500 lg:flex ">
         <Menu>
           <SubMenu label="Formal" className=" text-lg ">
             <MenuItem> Oxford Shoes </MenuItem>
@@ -53,7 +53,7 @@ function ProductLists() {
         <div className=" text-center m-3">
           <h1 className=" text-4xl font-lilita"> Formal Shoes</h1>
         </div>
-        <div className="  flex justify-center  flex-wrap h-full   mx-20">
+        <div className="  flex justify-center  flex-wrap h-full  ">
           {ProductList.map((item) => (
             <SingleProduct item={item} />
           ))}
