@@ -17,7 +17,7 @@ const CartSlice = createSlice({
       );
       cartItem
         ? (cartItem.amount = cartItem.amount + 1)
-        : state.cartItems.push({ ...action.payload, amount: 1 });
+        : state.cartItems.push({ ...action.payload, amouAnt: 1 });
     },
     increase: (state, action) => {
       state.amount++;

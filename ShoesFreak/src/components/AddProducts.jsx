@@ -24,8 +24,6 @@ function AddProducts() {
 
   const types = ["image/jpg", "image/jpeg", "image/png", "image/PNG"];
   const handleProductImg = (e) => {
-    let selectedFile = e.target.files[0];
-
     if (selectedFile) {
       if (selectedFile && types.includes(selectedFile.type)) {
         setImage(selectedFile);

@@ -1,11 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
-import ProductList from "../productslist.json";
+// import ProductList from "../productslist.json";
 import SingleProduct from "@/components/SingleProduct";
+import { db } from "@/config/Config";
+import { useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
 
 function ProductLists() {
   //   const [rating, setRating] = useState(0);
+  const [products, setProducts] = useState([]);
+
+  const getProducts = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "Products"));
+      const productArray = [];
+      querySnapshot.forEach((doc) => {
+        productArray.push({ ...doc.data(), Id: doc.id });
+      });
+      setProducts(productArray);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <div className=" flex ">
@@ -49,14 +70,15 @@ function ProductLists() {
         </Menu>
       </Sidebar>
 
-      <div className=" w-full h-full border-2 bg-[#e3f2eb]">
+      <div className=" w-full  h-full border-2 bg-[#e3f2eb]">
         <div className=" text-center m-3">
           <h1 className=" text-4xl font-lilita"> Formal Shoes</h1>
         </div>
         <div className="  flex justify-center  flex-wrap h-full  ">
-          {ProductList.map((item) => (
-            <SingleProduct item={item} />
-          ))}
+          {products.length > 0 &&
+            products.map((item) => (
+              <SingleProduct key={item.Id} item={item} productId={item.Id} />
+            ))}
         </div>
         <div className=" flex justify-center">
           <button className=" flex text-2xl font-josefin shadow-lg my-10 px-4 py-1 bg-[#458D69] text-white hover:bg-[#356e52] hover:-translate-y-1 hover:scale-110 duration-200 ">

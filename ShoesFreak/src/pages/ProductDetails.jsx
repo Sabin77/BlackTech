@@ -16,6 +16,8 @@ import { Item } from "@radix-ui/react-accordion";
 function ProductDetails() {
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
+
+  const handleAddToCart = () => {};
   return (
     <div className=" flex text-gray-600 my-20">
       <div className="Photo Section flex flex-1 flex-row-reverse ">
@@ -121,7 +123,10 @@ function ProductDetails() {
             <button className=" border-2 mr-3 px-3 py-2 bg-slate-800 text-white hover:bg-slate-600">
               Buy now
             </button>
-            <button className=" border-2 mx-3 px-3 py-2 bg-slate-800 text-white hover:bg-slate-600">
+            <button
+              className=" border-2 mx-3 px-3 py-2 bg-slate-800 text-white hover:bg-slate-600"
+              onClick={handleAddToCart}
+            >
               Add to cart
             </button>
           </div>

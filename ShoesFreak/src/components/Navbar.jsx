@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import data from "../templatedata.json";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaRegUserCircle } from "react-icons/fa";
@@ -29,7 +29,7 @@ import { open } from "./State/Slice/CheckOutSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "firebase/auth";
 
-function Navbar({ user }) {
+function Navbar({ user, cartAmount }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { amount } = useSelector((state) => state.cart);
@@ -134,15 +134,17 @@ function Navbar({ user }) {
           <div className=" hidden sm:flex flex-1 ">
             <IoMdHeart className=" text-xl mx-4 mt-2 text-red-500 cursor-pointer" />
 
-            <div
-              className=" flex justify-center items-center w-10 h-10  text-xl cursor-pointer"
-              onClick={() => dispatch(open())}
-            >
-              <FiShoppingCart />
-              <div className="flex self-start justify-center items-center rounded-full bg-red-400 w-5 h-5 ">
-                <p className=" text-white text-sm">{amount}</p>
+            <Link to="/cart">
+              <div
+                className=" flex justify-center items-center w-10 h-10  text-xl cursor-pointer"
+                // onClick={() => dispatch(open())}
+              >
+                <FiShoppingCart />
+                <div className="flex self-start justify-center items-center rounded-full bg-red-400 w-5 h-5 ">
+                  <p className=" text-white text-sm">{cartAmount}</p>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
           <div className="flex  items-center justify-center flex-1 lg:hidden">
             {isHomePage ? (
