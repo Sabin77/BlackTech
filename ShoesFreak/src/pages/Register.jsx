@@ -1,7 +1,57 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { auth, db } from "@/config/Config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 function Register() {
+  const navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState({
+    full_name: "",
+    email: "",
+    phone: "",
+    password: "",
+  });
+
+  const [error, setError] = useState();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserDetails({ ...userDetails, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { full_name, email, phone, password } = userDetails;
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      console.log(userCredential);
+
+      //store additonal user information in firestore
+      await setDoc(doc(db, "users", user.uid), {
+        full_name,
+        email,
+        phone,
+      });
+
+      setUserDetails({
+        full_name: "",
+        email: "",
+        phone: "",
+        password: "",
+      });
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   return (
     <div className="flex justify-center">
       <div className="flex  w-[1000px] h-[500px] my-10 border-2 rounded-3xl">
@@ -28,12 +78,17 @@ function Register() {
               {" "}
               SIGN UP
             </h1>
-            <div className=" flex flex-col flex-1 m-2 space-y-4 mt-10">
-              <label> First Name</label>
+            <form
+              className=" flex flex-col flex-1 m-2 space-y-4 mt-10"
+              onSubmit={handleSubmit}
+            >
+              <label> Full Name</label>
 
               <input
                 type="text"
-                name="first-name"
+                name="full_name"
+                value={userDetails.full_name}
+                onChange={handleChange}
                 className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
                 required
               />
@@ -41,7 +96,9 @@ function Register() {
               <label> Email</label>
               <input
                 type="email"
-                name="Email"
+                name="email"
+                value={userDetails.email}
+                onChange={handleChange}
                 className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
                 required
               />
@@ -49,11 +106,16 @@ function Register() {
               <input
                 name="phone"
                 type="number"
+                value={userDetails.phone}
+                onChange={handleChange}
                 className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
               />
               <label> Password</label>
               <input
                 type="password"
+                name="password"
+                value={userDetails.password}
+                onChange={handleChange}
                 className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
               />
 
@@ -61,7 +123,12 @@ function Register() {
                 {" "}
                 SIGN UP
               </button>
-            </div>
+            </form>
+            {error && (
+              <>
+                <div className=" text-red-500 mt-2">{error}</div>
+              </>
+            )}
           </div>
         </div>
       </div>

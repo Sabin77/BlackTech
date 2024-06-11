@@ -17,6 +17,9 @@ import ProductLists from "./pages/ProductLists.jsx";
 import Cart from "./pages/Cart.jsx";
 import { Provider } from "react-redux";
 import { store } from "./components/State/Store.jsx";
+import ProductDetails from "./pages/ProductDetails.jsx";
+import AddProducts from "./components/AddProducts.jsx";
+import KhaltiCheckout from "khalti-checkout-web";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +29,9 @@ const router = createBrowserRouter(
       <Route path="register" element={<Register />} />
       <Route path="productlists" element={<ProductLists />} />
       <Route path="cart" element={<Cart />} />
+      <Route path="productDetails" element={<ProductDetails />} />
+      <Route path="addproducts" element={<AddProducts />} />
+      <Route path="checkout" element={<KhaltiCheckout />} />
     </Route>
   )
 );
