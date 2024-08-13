@@ -1,0 +1,70 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Product {
+  brand           String?
+  category        String
+  colors          String?
+  createdAt       DateTime @default(now())
+  discountedprice Float?
+  id              String   @id @default(cuid())
+  name            String?
+  originalprice   Float?
+  sizes           String
+  stock           String
+  updatedAt       DateTime @updatedAt
+}
+
+model Supplier {
+  companyLogo String?
+  companyName String
+  createdAt   DateTime @default(now())
+  email       String   @unique
+  id          String   @id @default(cuid())
+  name        String?
+  orders      Order[]
+  phone       String?  @unique
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  createdAt   DateTime        @default(now())
+  cutomerid   String
+  id          String          @id @default(cuid())
+  ordereddate DateTime
+  productlist String
+  status      EnumOrderStatus
+  supplier    Supplier        @relation(fields: [supplierId], references: [id])
+  supplierId  String
+  totalcost   String
+  updatedAt   DateTime        @updatedAt
+}
+
+model Notification {
+  createdAt   DateTime  @default(now())
+  datesent    DateTime?
+  id          String    @id @default(cuid())
+  message     String?
+  recepientid String?
+  title       String?
+  updatedAt   DateTime  @updatedAt
+}
+
+model Customer {
+  createdAt DateTime @default(now())
+  email     String   @unique
+  id        String   @id @default(cuid())
+  name      String?
+  phone     String   @unique
+  updatedAt DateTime @updatedAt
+}
+
+enum EnumOrderStatus {
+  Option1
+}
