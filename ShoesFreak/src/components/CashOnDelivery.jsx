@@ -12,8 +12,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-function CashOnDelivery() {
+function CashOnDelivery({ TotalPrice, totalQty }) {
   const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [cartPrice] = useState(TotalPrice);
+  const [cartQty] = useState(totalQty);
   const maxLength = 10;
 
   const handlePhoneChange = (e) => {
@@ -58,7 +61,7 @@ function CashOnDelivery() {
                 Address
               </Label>
               <input
-                requireds
+                required
                 id="address"
                 defaultValue=""
                 className="col-span-3 h-10 border-2 outline-none rounded-md"
