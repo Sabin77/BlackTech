@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import logo from "../assets/logo.png";
-import Addsupplier from "@/components/Addsupplier";
-
+import Addsupplier from "@/components/Admin/Addsupplier";
 import axios from "axios";
-import EditSupplier from "@/components/EditSupplier";
-import DeleteSupplier from "@/components/DeleteSupplier";
+import EditSupplier from "@/components/Admin/EditSupplier";
+import DeleteSupplier from "@/components/Admin/DeleteSupplier";
 
 function Suppliers() {
   const [suppliers, setSuppliers] = useState([]);

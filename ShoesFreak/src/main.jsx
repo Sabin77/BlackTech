@@ -20,7 +20,7 @@ import { store } from "./components/State/Store.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 import AddProducts from "./components/AddProducts.jsx";
 import KhaltiCheckout from "khalti-checkout-web";
-import Addsupplier from "./components/Addsupplier.jsx";
+import Addsupplier from "./components/Admin/Addsupplier.jsx";
 
 import Dashboard from "./components/Admin/Dashboard.jsx";
 import Suppliers from "./components/Admin/Suppliers.jsx";

@@ -16,18 +16,18 @@ import {
 } from "@/components/ui/chart";
 
 const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 273 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
+  { month: "January", supplier: 186 },
+  { month: "February", supplier: 305 },
+  { month: "March", supplier: 237 },
+  { month: "April", supplier: 273 },
+  { month: "May", supplier: 209 },
+  { month: "June", supplier: 214 },
 ];
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "hsl(var(--chart-1))",
+  supplier: {
+    label: "Suppliers",
+    color: "#5FBF8F",
   },
 };
 
@@ -35,9 +35,9 @@ export function RadialGraph() {
   return (
     <Card>
       <CardHeader className="items-center">
-        <CardTitle>Radar Chart - Dots</CardTitle>
+        <CardTitle className="text-[#5FBF8F ]">Suppliers Count</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Showing total suppliers for the last 6 months
         </CardDescription>
       </CardHeader>
       <CardContent className="pb-0">
@@ -50,8 +50,8 @@ export function RadialGraph() {
             <PolarAngleAxis dataKey="month" />
             <PolarGrid />
             <Radar
-              dataKey="desktop"
-              fill="var(--color-desktop)"
+              dataKey="supplier"
+              fill="#5FBF8F"
               fillOpacity={0.6}
               dot={{
                 r: 4,

@@ -42,4 +42,4 @@ const SupplierSchema = new Schema({
     default: Date.now,
   },
 });
-module.exports = mongoose.model("suppliers", SupplierSchema);
+module.exports = mongoose.model("supplier", SupplierSchema);

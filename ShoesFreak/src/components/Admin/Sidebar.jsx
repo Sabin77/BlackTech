@@ -41,14 +41,12 @@ function Sidebar({ setSelectedOption, activeOption }) {
 
         <div
           className={`flex items-center border-4 border-white p-3 mx-1 rounded-l-lg cursor-pointer ${
-            activeOption === "Customers"
-              ? "bg-[#dbefe5] border-r-[#5FBF8F]"
-              : ""
+            activeOption === "Products" ? "bg-[#dbefe5] border-r-[#5FBF8F]" : ""
           } hover:bg-[#dbefe5]`}
-          onClick={() => handleOptionClick("Customers")}
+          onClick={() => handleOptionClick("Products")}
         >
           <LuUsers className="text-xl" />
-          <p className="mx-2">Customers</p>
+          <p className="mx-2">Products</p>
         </div>
 
         <div

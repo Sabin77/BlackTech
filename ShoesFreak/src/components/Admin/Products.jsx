@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { RadialChart } from "./RadialChart";
 import { RadialGraph } from "./RadialChart2";
@@ -39,34 +39,32 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import SupplierDetails from "./SupplierDetails";
-import Addsupplier from "./Addsupplier";
+import { header } from "server/reply";
 
 function Suppliers() {
-  const [suppliers, setSuppliers] = useState([]);
+  const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const closeModal = () => setShowModal(false);
-
   const getallsuppliers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/supplier/getallsuppliers",
+        "http://localhost:5000/api/product/getallproducts",
         {
           headers: {
             Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
           },
         }
       );
-      setSuppliers(response.data);
+      setProducts(response.data);
       // console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -77,18 +75,18 @@ function Suppliers() {
     getallsuppliers();
   }, [showModal, showEdit, showDelete]);
 
-  const handleDetailsClick = (supplier) => {
-    setSelectedSupplier(supplier);
+  const handleDetailsClick = (product) => {
+    setSelectedProduct(product);
     setShowDetails(true);
   };
 
-  const handleEditClick = (supplier) => {
-    setSelectedSupplier(supplier);
+  const handleEditClick = (product) => {
+    setSelectedProduct(product);
     setShowEdit(true);
   };
 
-  const handleDeleteClick = (supplier) => {
-    setSelectedSupplier(supplier);
+  const handleDeleteClick = (product) => {
+    setSelectedProduct(product);
     setShowDelete(true);
   };
 
@@ -128,39 +126,44 @@ function Suppliers() {
       enableHiding: false,
     },
     {
-      accessorKey: "name",
-      header: "Name",
+      accessorKey: "productImage",
+      header: " Product Image",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("name")}</div>
+        <img
+          src={row.getValue("productImage")}
+          alt="Company Logo"
+          className="h-10 w-10 object-cover"
+        />
       ),
     },
     {
-      accessorKey: "email",
+      accessorKey: "name",
       header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
+          Product Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("email")}</div>
+        <div className="capitalize ml-4">{row.getValue("name")}</div>
       ),
     },
-    {
-      accessorKey: "date", // Assuming the date is stored in a field named "date"
-      header: () => <div className="text-right">Date of Creation</div>,
-      cell: ({ row }) => {
-        const date = new Date(row.getValue("date"));
-        const formattedDate = date
-          .toISOString()
-          .split("T")[0]
-          .replace(/-/g, "/");
 
-        return <div className="text-right font-medium">{formattedDate}</div>;
-      },
+    {
+      accessorKey: "color",
+      header: "Color",
+      cell: ({ row }) => (
+        <div className="capitalize">
+          {row.getValue("color").map((colr, index) => (
+            <span key={index} className="mr-2">
+              {colr}
+            </span>
+          ))}
+        </div>
+      ),
     },
     {
       id: "actions",
@@ -203,7 +206,7 @@ function Suppliers() {
   ];
 
   const table = useReactTable({
-    data: suppliers,
+    data: products,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -227,10 +230,10 @@ function Suppliers() {
       <div className=" bg-white h-screen m-4 p-4 rounded-md">
         <div className="flex items-center py-4">
           <Input
-            placeholder="Filter emails..."
-            value={table.getColumn("email")?.getFilterValue() ?? ""}
+            placeholder="Filter product..."
+            value={table.getColumn("name")?.getFilterValue() ?? ""}
             onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
+              table.getColumn("name")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -240,9 +243,6 @@ function Suppliers() {
                 Columns <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-
-            <Addsupplier closeModal={closeModal} />
-
             <DropdownMenuContent align="end">
               {table
                 .getAllColumns()
@@ -338,7 +338,7 @@ function Suppliers() {
             </Button>
           </div>
         </div>
-        {showDetails && (
+        {/* {showDetails && (
           <SupplierDetails
             showDetails={showDetails}
             supplier={selectedSupplier}
@@ -359,7 +359,7 @@ function Suppliers() {
             supplier={selectedSupplier}
             closeDelete={closeDelete}
           />
-        )}
+        )} */}
       </div>
     </div>
   );

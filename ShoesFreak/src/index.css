@@ -1,7 +1,9 @@
    
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
   @tailwind base;
   @tailwind components;
   @tailwind utilities;
+
  
 
   @layer base {
@@ -74,5 +76,6 @@
     }
     body {
       @apply bg-background text-foreground;
+      font-family: "Outfit", sans-serif;
     }
   }

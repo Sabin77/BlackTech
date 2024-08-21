@@ -60,6 +60,7 @@ router.get(
   fetchuser,
   authMiddleware,
   adminMiddleware,
+
   async (req, res) => {
     try {
       const suppliers = await Supplier.find({ user: req.user.id });
@@ -77,8 +78,13 @@ router.put(
   "/updatesupplier/:id",
   authMiddleware,
   adminMiddleware,
+  upload.single("companylogo"),
+
   async (req, res) => {
     const { name, email, phone, address, companyname } = req.body;
+
+    const companylogo = req.file ? req.file.path : undefined;
+
     // Create a newSupplier object
     const newSupplier = {};
 
@@ -97,6 +103,9 @@ router.put(
     if (companyname) {
       newSupplier.companyname = companyname;
     }
+    if (companylogo) {
+      newSupplier.companylogo = companylogo;
+    }
 
     try {
       // Find the supplier to be updated and update it
@@ -113,6 +122,23 @@ router.put(
       );
 
       res.json({ supplier });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
+
+router.get(
+  "/getsupplierdetails/:id",
+  fetchuser,
+  authMiddleware,
+  adminMiddleware,
+
+  async (req, res) => {
+    try {
+      let supplier = await Supplier.findById(req.params.id);
+      res.json(supplier);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal Server Error");

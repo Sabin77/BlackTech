@@ -1,6 +1,8 @@
+"use client";
+
 import React from "react";
 import { TrendingUp } from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import {
   Card,
@@ -27,35 +29,41 @@ const chartData = [
 
 const chartConfig = {
   desktop: {
-    label: "Sales",
+    label: "Active",
     color: "#63aa86",
   },
 };
 
-export function Barchart() {
+export default function CustomerLineChart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Total Sales</CardTitle>
+        <CardTitle>Product Sold</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart data={chartData}>
+          <LineChart data={chartData} margin={{ left: 12, right: 12 }}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="month"
               tickLine={false}
-              tickMargin={10}
               axisLine={false}
+              tickMargin={8}
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
-          </BarChart>
+            <Line
+              dataKey="desktop"
+              type="linear"
+              stroke="#63aa86"
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
@@ -63,7 +71,7 @@ export function Barchart() {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total sales for the last 6 months
+          Showing total visitors for the last 6 months
         </div>
       </CardFooter>
     </Card>

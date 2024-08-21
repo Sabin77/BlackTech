@@ -1,10 +1,10 @@
-import React from "react";
-import { useState } from "react";
-import "../App.css";
+import React, { useState, useEffect } from "react";
 import { GiCrossedBones } from "react-icons/gi";
 import axios from "axios";
 
-function Addsupplier({ closeModal }) {
+function EditSupplier({ supplier, closeEdit }) {
+  console.log(supplier);
+
   const [supplierDetails, setSupplierDetails] = useState({
     name: "",
     email: "",
@@ -15,7 +15,21 @@ function Addsupplier({ closeModal }) {
 
   const [logo, setLogo] = useState(null);
 
-  const [errorMsg, setErrorMsg] = useState();
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // Initialize form fields with supplier data when component mounts
+  useEffect(() => {
+    if (supplier) {
+      setSupplierDetails({
+        name: supplier.name || "",
+        email: supplier.email || "",
+        phone: supplier.phone || "",
+        address: supplier.address || "",
+        companyname: supplier.companyname || "",
+      });
+    }
+    setLogo(supplier.companylogo);
+  }, [supplier]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,17 +43,18 @@ function Addsupplier({ closeModal }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = new FormData();
-    data.append("name", supplierDetails.name);
-    data.append("email", supplierDetails.email);
-    data.append("address", supplierDetails.address);
-    data.append("phone", supplierDetails.phone);
-    data.append("companyname", supplierDetails.companyname);
-    data.append("companylogo", logo);
+    const data = {
+      name: supplierDetails.name,
+      email: supplierDetails.email,
+      phone: supplierDetails.phone,
+      address: supplierDetails.address,
+      companyname: supplierDetails.companyname,
+      companylogo: logo,
+    };
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/supplier/addsupplier",
+      const response = await axios.put(
+        `http://localhost:5000/api/supplier/updatesupplier/${supplier._id}`,
         data,
         {
           headers: {
@@ -50,29 +65,22 @@ function Addsupplier({ closeModal }) {
       );
 
       console.log("Form submitted successfully:", response.data);
-      setSupplierDetails({
-        name: "",
-        email: "",
-        phone: "",
-        address: "",
-        companyname: "",
-      });
+      closeEdit(); // Close the modal after successful submission
     } catch (error) {
       setErrorMsg(error.message);
     }
   };
+
   return (
     <>
       <div className="modal-wrapper fixed inset-0  bg-blur"></div>
       <div className=" flex fixed  justify-center items-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
         <div className="flex flex-col rounded-lg border-2 bg-white">
           <div className=" flex relative justify-center items-center border-2 bg-[#458D69] rounded-t-lg w-full h-20">
-            <p className=" font-semibold text-white  text-3xl">
-              Add a Supplier
-            </p>
+            <p className=" font-semibold text-white  text-3xl">Edit Supplier</p>
             <GiCrossedBones
               className=" absolute right-4 top-2 text-xl text-white cursor-pointer"
-              onClick={closeModal}
+              onClick={closeEdit}
             />
           </div>
           <form
@@ -83,7 +91,7 @@ function Addsupplier({ closeModal }) {
               <div className=" flex flex-1 flex-col mx-2 h-16">
                 <label> Name</label>
                 <input
-                  type="name"
+                  type="text"
                   name="name"
                   value={supplierDetails.name}
                   onChange={handleChange}
@@ -120,7 +128,7 @@ function Addsupplier({ closeModal }) {
               <div className=" flex flex-1 flex-col mx-2 h-16">
                 <label> Address</label>
                 <input
-                  type="name"
+                  type="text"
                   name="address"
                   value={supplierDetails.address}
                   onChange={handleChange}
@@ -134,7 +142,7 @@ function Addsupplier({ closeModal }) {
               <div className=" flex flex-1 flex-col mx-2 h-16">
                 <label> Company Name</label>
                 <input
-                  type="name"
+                  type="text"
                   name="companyname"
                   value={supplierDetails.companyname}
                   onChange={handleChange}
@@ -144,20 +152,16 @@ function Addsupplier({ closeModal }) {
               </div>
             </div>
 
-            <div>
-              <label>Logo:</label>
+            <div className=" pl-3">
+              <label>Company Logo:</label>
               <input type="file" onChange={handleFileChange} accept="image/*" />
             </div>
 
             <button className=" border-2 px-4 py-1 w-fit self-center  rounded-full hover:text-white hover:bg-[#5FBF8F]">
               {" "}
-              Add
+              Edit
             </button>
-            {errorMsg && (
-              <>
-                <div className=" text-red-500 mt-2">{errorMsg}</div>
-              </>
-            )}
+            {errorMsg && <div className=" text-red-500 mt-2">{errorMsg}</div>}
           </form>
         </div>
       </div>
@@ -165,4 +169,4 @@ function Addsupplier({ closeModal }) {
   );
 }
 
-export default Addsupplier;
+export default EditSupplier;

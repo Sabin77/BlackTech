@@ -17,9 +17,7 @@ import {
 } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
 
-const chartData = [
-  { browser: "safari", visitors: 1260, fill: "var(--color-safari)" },
-];
+const chartData = [{ browser: "safari", visitors: 1260, fill: "#5FBF8F" }];
 
 const chartConfig = {
   visitors: {
@@ -27,7 +25,7 @@ const chartConfig = {
   },
   safari: {
     label: "Safari",
-    color: "hsl(var(--chart-2))",
+    color: "#63aa86",
   },
 };
 
@@ -35,7 +33,7 @@ export function RadialChart() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Radial Chart - Shape</CardTitle>
+        <CardTitle>Total Suppliers</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
@@ -80,7 +78,7 @@ export function RadialChart() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Suppliers
                         </tspan>
                       </text>
                     );
@@ -96,7 +94,7 @@ export function RadialChart() {
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Showing total suppliers for the last 6 months
         </div>
       </CardFooter>
     </Card>
