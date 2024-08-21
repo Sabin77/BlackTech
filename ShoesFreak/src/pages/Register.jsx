@@ -3,50 +3,58 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "@/config/Config";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import axios from "axios";
 
 function Register() {
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
-    full_name: "",
+    name: "",
     email: "",
-    phone: "",
     password: "",
   });
 
   const [error, setError] = useState();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserDetails({ ...userDetails, [name]: value });
   };
 
   const handleSubmit = async (e) => {
+    const data = new FormData();
+    data.append("name", userDetails.name);
+    data.append("email", userDetails.email);
+    data.append("password", userDetails.password);
+
     e.preventDefault();
-    const { full_name, email, phone, password } = userDetails;
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/signup",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
-      const user = userCredential.user;
-      console.log(userCredential);
 
-      //store additonal user information in firestore
-      await setDoc(doc(db, "users", user.uid), {
-        full_name,
-        email,
-        phone,
-      });
+      // Get the token from the response
+      const token = response.data.authToken;
+      console.log(token);
+      localStorage.setItem("authToken", token);
 
-      setUserDetails({
-        full_name: "",
-        email: "",
-        phone: "",
-        password: "",
-      });
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
+      if (response.status === 200) {
+        setUserDetails({
+          name: "",
+          email: "",
+          password: "",
+        });
+
+        setTimeout(() => {
+          navigate("/login");
+        }, 1000);
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -86,8 +94,8 @@ function Register() {
 
               <input
                 type="text"
-                name="full_name"
-                value={userDetails.full_name}
+                name="name"
+                value={userDetails.name}
                 onChange={handleChange}
                 className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
                 required
@@ -102,14 +110,7 @@ function Register() {
                 className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
                 required
               />
-              <label>Phone</label>
-              <input
-                name="phone"
-                type="number"
-                value={userDetails.phone}
-                onChange={handleChange}
-                className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
-              />
+
               <label> Password</label>
               <input
                 type="password"

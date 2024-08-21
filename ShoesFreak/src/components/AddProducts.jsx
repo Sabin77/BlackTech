@@ -43,46 +43,6 @@ function AddProducts() {
       setImageError("Please select an image");
       return;
     }
-
-    const imageRef = ref(storage, `product-images/${image.name}`);
-    const uploadTask = uploadBytesResumable(imageRef, image);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log(progress);
-      },
-      (error) => setUploadError(error.message),
-      async () => {
-        try {
-          const url = await getDownloadURL(uploadTask.snapshot.ref);
-          await addDoc(collection(db, "Products"), {
-            title: products.title,
-            description: products.description,
-            original_price: Number(products.original_price),
-            discounted_price: Number(products.discounted_price),
-            url,
-          });
-          setSuccessMsg("Product added successfully");
-          setProducts({
-            title: "",
-            description: "",
-            original_price: "",
-            discounted_price: "",
-          });
-          document.getElementById("file").value = "";
-          setImageError("");
-          setUploadError("");
-          setTimeout(() => {
-            setSuccessMsg("");
-          }, 2000);
-        } catch (error) {
-          setUploadError(error.message);
-        }
-      }
-    );
   };
 
   return (

@@ -44,6 +44,7 @@ function Cart() {
   const getCartProducts = async (userId) => {
     try {
       const cartCollectionName = `Cart${userId}`;
+      console.log(userId);
       const querySnapshot = await getDocs(collection(db, cartCollectionName));
 
       const productArray = [];
@@ -174,14 +175,14 @@ function Cart() {
   };
 
   return (
-    <div className="flex min-h-96">
+    <div className="flex items-center sm:flex-col min-h-96 w-screen">
       {cartProducts.length === 0 ? (
         <div className="w-full h-full flex justify-center items-center">
           <p className="text-4xl font-poetsen py-7">No products in the cart</p>
         </div>
       ) : (
         <>
-          <div className="w-2/3 h-full">
+          <div className="lg:w-2/3 h-full">
             <h1 className="text-center text-4xl font-poetsen py-7">
               Your Cart
             </h1>
@@ -250,7 +251,7 @@ function Cart() {
               ))}
             </div>
           </div>
-          <div className="w-1/3 h-full">
+          <div className=" flex flex-col sm:w-1/2  lg:w-1/3 h-full">
             <h1 className="text-center text-4xl font-poetsen py-7">Subtotal</h1>
             <div className="flex flex-col mx-10 rounded-xl border-2 border-[#c3d4cb]">
               <h1 className="text-2xl font-bold text-gray-500 px-3 py-2">

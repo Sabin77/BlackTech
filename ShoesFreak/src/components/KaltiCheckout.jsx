@@ -17,7 +17,7 @@ const KhaltiPayment = () => {
           method: "POST",
           headers: {
             Authorization:
-              "key test_public_key_3d8c57b2203e43198d1fbbab382500c1",
+              "key test_secret_key_11fe067a0c9d4051a309c9fd770b365a",
             "Content-Type": "application/json",
           },
           body: JSON.stringify({

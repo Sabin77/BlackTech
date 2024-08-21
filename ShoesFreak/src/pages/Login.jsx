@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "@/config/Config";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import axios from "axios";
+
+const apiUrl = import.meta.env.VITE_API_URL_AUTH;
 
 function Login() {
   const navigate = useNavigate();
@@ -11,6 +14,7 @@ function Login() {
   });
 
   const [errorMsg, setErrorMsg] = useState();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserDetails({ ...userDetails, [name]: value });
@@ -20,11 +24,21 @@ function Login() {
     e.preventDefault();
     const { email, password } = userDetails;
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const response = await axios.post(`${apiUrl}/login`, userDetails, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("Login Successfull");
+      const role = response.data.role;
+      localStorage.setItem("role", role);
+
       setUserDetails({
         email: "",
         password: "",
       });
+
       setTimeout(() => {
         navigate("/");
       }, 1000);
@@ -32,11 +46,12 @@ function Login() {
       setErrorMsg(error.message);
     }
   };
+
   return (
     <div className="flex justify-center ">
       <div className="flex  w-[1000px] h-[500px] my-10 border-2 rounded-3xl">
         <div className="flex justify-center w-[600px] ">
-          <div className=" w-2/3  ">
+          <div className=" w-2/3">
             <h1 className=" text-4xl font-poetsen text-center my-4"> LOGIN</h1>
             <form
               className=" flex flex-col flex-1 m-2 space-y-4 mt-10"

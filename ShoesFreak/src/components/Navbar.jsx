@@ -34,19 +34,24 @@ function Navbar({ user, cartAmount }) {
   const dispatch = useDispatch();
   const { amount } = useSelector((state) => state.cart);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log(searchTerm);
+  // console.log(searchTerm);
 
+  const [role, setRole] = useState("");
   const location = useLocation();
 
   const isHomePage = location.pathname === "/";
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate("/login");
-    } catch (error) {
-      console.error("Error logging out: ", error);
+  const Role = localStorage.getItem("role");
+  useEffect(() => {
+    if (isHomePage) {
+      setRole(Role);
+      console.log(role);
     }
+  }, [isHomePage]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("role");
+    navigate("/login");
   };
 
   return (
@@ -146,6 +151,13 @@ function Navbar({ user, cartAmount }) {
               </div>
             </Link>
           </div>
+          {role == "admin" && isHomePage && (
+            <Link to="/getallsuppliers">
+              <button className=" mx-4 px-3 rounded-md bg-[#5FBF8F] text-white py-1 hover:bg-[#458D69]">
+                See suppliers
+              </button>
+            </Link>
+          )}
           <div className="flex  items-center justify-center flex-1 lg:hidden">
             {isHomePage ? (
               <Sheet>
@@ -336,23 +348,12 @@ function Navbar({ user, cartAmount }) {
         <div className="hidden  lg:flex items-center flex-1 justify-center font-playfair ">
           <FaRegUserCircle className=" text-xl mx-2" />
 
-          {user ? (
-            <>
-              {user}
-              <button
-                className="  mx-4 px-3 rounded-md bg-[#5FBF8F] text-white py-1 hover:bg-[#458D69]"
-                onClick={handleLogout}
-              >
-                Log Out
-              </button>
-            </>
-          ) : (
-            <Link to="/login">
-              <button className=" mx-4 px-3 rounded-md bg-[#5FBF8F] text-white py-1 hover:bg-[#458D69]">
-                Log In
-              </button>
-            </Link>
-          )}
+          <button
+            className="  mx-4 px-3 rounded-md bg-[#5FBF8F] text-white py-1 hover:bg-[#458D69]"
+            onClick={handleLogout}
+          >
+            Log Out
+          </button>
         </div>
       </div>
     </div>
