@@ -38,8 +38,8 @@ import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
 import DefaultImg from "../../assets/default_shoes.png";
 
-function Suppliers() {
-  const [products, setProducts] = useState([]);
+function StockOut() {
+  const [stockOut, setStockOut] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -56,14 +56,14 @@ function Suppliers() {
   const getallsuppliers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/product/getallproducts",
+        "http://localhost:5000/api/stock/getallstockout",
         {
           headers: {
             Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
           },
         }
       );
-      setProducts(response.data);
+      // setProducts(response.data);
       // console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -156,18 +156,19 @@ function Suppliers() {
         <div className="capitalize ml-4">{row.getValue("name")}</div>
       ),
     },
+    {
+      accessorKey: "quantity_out",
+      header: "Quantity Out",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("quantity_out")}</div>
+      ),
+    },
 
     {
-      accessorKey: "color",
-      header: "Color",
+      accessorKey: "price",
+      header: "Price",
       cell: ({ row }) => (
-        <div className="capitalize">
-          {row.getValue("color").map((colr, index) => (
-            <span key={index} className="mr-2">
-              {colr}
-            </span>
-          ))}
-        </div>
+        <div className="capitalize">{row.getValue("price")}</div>
       ),
     },
     {
@@ -211,7 +212,7 @@ function Suppliers() {
   ];
 
   const table = useReactTable({
-    data: products,
+    data: stockOut,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -232,7 +233,7 @@ function Suppliers() {
 
   return (
     <div className=" flex flex-col space-y-4 ">
-      <div className=" bg-white  m-4 p-4 rounded-md">
+      <div className=" bg-white h-screen m-4 p-4 rounded-md">
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter product..."
@@ -372,4 +373,4 @@ function Suppliers() {
   );
 }
 
-export default Suppliers;
+export default StockOut;

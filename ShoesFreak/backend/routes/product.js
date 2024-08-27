@@ -37,7 +37,7 @@ router.post(
         req.body.color = JSON.parse(req.body.color);
       }
 
-      const { name, description, quantity_limit, color } = req.body;
+      const { name, description, quantity_limit, color, supplier } = req.body;
 
       //If there are errors, return Bad request and the errors
       const errors = validationResult(req);
@@ -45,15 +45,17 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      // Access the uploaded file (logo)
-      const product_image = req.file ? req.file.path : null;
+      // Access the uploaded file (product_image)
+      const product_image = req.file;
+      console.log(req.file);
 
       const product = new Product({
         name,
         description,
         quantity_limit,
         color,
-        product_image,
+        supplier,
+        productImage: product_image ? product_image.path : null,
         user: req.user.id,
       });
 
@@ -94,7 +96,7 @@ router.put(
   upload.single("productImage"),
 
   async (req, res) => {
-    const { name, description, quantity_limit, color } = req.body;
+    const { name, description, quantity_limit, color, supplier } = req.body;
 
     const productImage = req.file ? req.file.path : undefined;
 
@@ -115,6 +117,9 @@ router.put(
     }
     if (productImage) {
       newProduct.productImage = productImage;
+    }
+    if (supplier) {
+      newProduct.supplier = supplier;
     }
 
     try {
@@ -179,5 +184,16 @@ router.delete(
     }
   }
 );
+
+//Get the name and Id of the product only
+router.get("/getallnames", async (req, res) => {
+  try {
+    const products = await Product.find({}, "_id name productImage ");
+    res.json(products);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
 module.exports = router;

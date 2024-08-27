@@ -20,6 +20,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
 import CustomerLineChart from "./ProductLineChart";
 import CustomerBar from "./ProductBarChart";
+import StockIn from "./StockIn";
+import StockOut from "./StockOut";
 
 function Dashboard() {
   const [selectedOption, setSelectedOption] = useState("Dashboard");
@@ -224,15 +226,6 @@ function Dashboard() {
                       <div className=" w-full rounded-lg h-fit shadow-md ">
                         <RadialChart />
                       </div>
-
-                      {/* <button
-                        className=" my-6 w-fit p-2 bg-[#63aa86]  text-white rounded-lg"
-                        // onClick={() => setShowModal(true)}
-                      >
-                        {" "}
-                        Add a supplier
-                      </button> */}
-                      {/* {showModal && <Addsupplier closeModal={closeModal} />} */}
                     </div>
                   </div>
                 </TabsContent>
@@ -257,13 +250,15 @@ function Dashboard() {
           </>
         );
       case "Suppliers":
-        // setTitle("Suppliers");
         return <Suppliers />;
       case "Products":
-        // setTitle("Customers");
         return <Products />;
+      case "Stock In":
+        return <StockIn />;
+      case "Stock Out":
+        return <StockOut />;
+
       case "Settings":
-        // setTitle("Settings");
         return (
           <div className="m-4 p-4 bg-white rounded-lg">
             <Settings />

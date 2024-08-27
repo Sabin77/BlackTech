@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import "../../App.css";
 import { GiCrossedBones } from "react-icons/gi";
@@ -20,6 +20,7 @@ import {
 
 function Addsupplier({ closeModal }) {
   const imageRef = useRef(0);
+
   const [supplierDetails, setSupplierDetails] = useState({
     name: "",
     email: "",
@@ -40,14 +41,6 @@ function Addsupplier({ closeModal }) {
     const { name, value } = e.target;
     setSupplierDetails({ ...supplierDetails, [name]: value });
   };
-
-  // const handleFileChange = (e) => {
-  //   setLogo(e.target.files[0]);
-  // };
-
-  // const handleImageClick = () => {
-  //   imageRef.current.click();
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

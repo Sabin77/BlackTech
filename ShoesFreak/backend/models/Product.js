@@ -1,4 +1,3 @@
-const { required } = require("khalti-checkout-web");
 const mongoose = require("mongoose");
 const { type } = require("server/reply");
 const { Schema } = mongoose;
@@ -7,6 +6,11 @@ const ProductSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
+  },
+
+  supplier: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "supplier",
   },
 
   productImage: {

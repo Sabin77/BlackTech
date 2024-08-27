@@ -2,7 +2,6 @@ import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
-import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // import { total } from "./components/State/Slice/CartSlice";
 import { useEffect, useState, createContext, useContext } from "react";
@@ -20,7 +19,12 @@ function App() {
   const dispatch = useDispatch();
 
   const role = localStorage.getItem("role");
-  console.log(role);
+  const token = localStorage.getItem("token");
+  console.log(token);
+
+  useEffect(() => {
+    navigate("/login");
+  }, []);
 
   return (
     <>
