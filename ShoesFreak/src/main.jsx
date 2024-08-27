@@ -17,8 +17,7 @@ import ProductLists from "./pages/ProductLists.jsx";
 import Cart from "./pages/Cart.jsx";
 import { Provider } from "react-redux";
 import { store } from "./components/State/Store.jsx";
-import ProductDetails from "./pages/ProductDetails.jsx";
-import AddProducts from "./components/AddProducts.jsx";
+import ProductDetails from "./pages/ProductDetails2.jsx";
 import KhaltiCheckout from "khalti-checkout-web";
 import Addsupplier from "./components/Admin/Addsupplier.jsx";
 
@@ -33,18 +32,13 @@ const router = createBrowserRouter(
         <Route index element={<Layout />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-
+        <Route path="admin" element={<Dashboard />} />
         <Route path="productlists" element={<ProductLists />} />
         <Route path="cart" element={<Cart />} />
         <Route path="productDetails" element={<ProductDetails />} />
-        <Route path="addproducts" element={<AddProducts />} />
         <Route path="addsupplier" element={<Addsupplier />} />
 
         <Route path="checkout" element={<KhaltiCheckout />} />
-      </Route>
-      <Route path="/admin" element={<Admin />}>
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="suppliers" element={<Suppliers />} />
       </Route>
     </>
   )

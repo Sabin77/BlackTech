@@ -32,14 +32,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import AddProduct from "./AddProduct";
 import ProductDetails from "./ProductDetails";
 import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
 import DefaultImg from "../../assets/default_shoes.png";
+import AddStockIn from "./AddStockIn";
+import StockInDetails from "./StockInDetails";
+import EditStockIn from "./EditStockIn";
 
-function Suppliers() {
-  const [products, setProducts] = useState([]);
+function StockIn() {
+  const [stockIn, setStockIn] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -53,17 +55,17 @@ function Suppliers() {
 
   const closeModal = () => setShowModal(false);
 
-  const getallsuppliers = async () => {
+  const getallstockin = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/product/getallproducts",
+        "http://localhost:5000/api/stock/getallstockin",
         {
           headers: {
             Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
           },
         }
       );
-      setProducts(response.data);
+      setStockIn(response.data);
       // console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -71,21 +73,21 @@ function Suppliers() {
   };
 
   useEffect(() => {
-    getallsuppliers();
+    getallstockin();
   }, [showEdit, showDelete]);
 
-  const handleDetailsClick = (product) => {
-    setSelectedProduct(product);
+  const handleDetailsClick = (stockIn) => {
+    setSelectedProduct(stockIn);
     setShowDetails(true);
   };
 
-  const handleEditClick = (product) => {
-    setSelectedProduct(product);
+  const handleEditClick = (stockIn) => {
+    setSelectedProduct(stockIn);
     setShowEdit(true);
   };
 
-  const handleDeleteClick = (product) => {
-    setSelectedProduct(product);
+  const handleDeleteClick = (stockIn) => {
+    setSelectedProduct(stockIn);
     setShowDelete(true);
   };
 
@@ -142,7 +144,7 @@ function Suppliers() {
     },
 
     {
-      accessorKey: "name",
+      accessorKey: "productName",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -153,21 +155,22 @@ function Suppliers() {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="capitalize ml-4">{row.getValue("name")}</div>
+        <div className="capitalize ml-4">{row.getValue("productName")}</div>
+      ),
+    },
+    {
+      accessorKey: "quantity_in",
+      header: "Quantity In",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("quantity_in")}</div>
       ),
     },
 
     {
-      accessorKey: "color",
-      header: "Color",
+      accessorKey: "price",
+      header: "Price",
       cell: ({ row }) => (
-        <div className="capitalize">
-          {row.getValue("color").map((colr, index) => (
-            <span key={index} className="mr-2">
-              {colr}
-            </span>
-          ))}
-        </div>
+        <div className="capitalize">{row.getValue("price")}</div>
       ),
     },
     {
@@ -211,7 +214,7 @@ function Suppliers() {
   ];
 
   const table = useReactTable({
-    data: products,
+    data: stockIn,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -232,7 +235,7 @@ function Suppliers() {
 
   return (
     <div className=" flex flex-col space-y-4 ">
-      <div className=" bg-white  m-4 p-4 rounded-md">
+      <div className=" bg-white h-screen m-4 p-4 rounded-md">
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter product..."
@@ -249,7 +252,7 @@ function Suppliers() {
               </Button>
             </DropdownMenuTrigger>
 
-            <AddProduct closeModal={closeModal} updateData={getallsuppliers} />
+            <AddStockIn closeModal={closeModal} updateData={getallstockin} />
             <DropdownMenuContent align="end">
               {table
                 .getAllColumns()
@@ -346,24 +349,24 @@ function Suppliers() {
           </div>
         </div>
         {showDetails && (
-          <ProductDetails
+          <StockInDetails
             showDetails={showDetails}
-            product={selectedProduct}
+            stockIn={selectedProduct}
             closeDetails={closeDetails}
           />
         )}
 
         {showEdit && (
-          <EditProduct
+          <EditStockIn
             showEdit={showEdit}
-            product={selectedProduct}
+            stockIn={selectedProduct}
             closeEdit={closeEdit}
           />
         )}
         {showDelete && (
           <DeleteProduct
             showDelete={showDelete}
-            product={selectedProduct}
+            stockIn={selectedProduct}
             closeDelete={closeDelete}
           />
         )}
@@ -372,4 +375,4 @@ function Suppliers() {
   );
 }
 
-export default Suppliers;
+export default StockIn;

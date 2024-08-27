@@ -170,4 +170,15 @@ router.delete(
   }
 );
 
+//Get the name and Id of the supplier only
+router.get("/getallnames", async (req, res) => {
+  try {
+    const suppliers = await Supplier.find({}, "_id name companylogo");
+    res.json(suppliers);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 module.exports = router;

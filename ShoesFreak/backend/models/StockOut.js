@@ -8,7 +8,7 @@ const StockOutSchema = new Schema({
     ref: "product",
   },
 
-  quantity: {
+  quantity_out: {
     type: Number,
     required: true,
   },

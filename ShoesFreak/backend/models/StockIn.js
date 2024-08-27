@@ -3,9 +3,24 @@ const { type } = require("server/reply");
 const { Schema } = mongoose;
 
 const StockInSchema = new Schema({
-  product: {
+  batch_id: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+
+  productId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "product",
+  },
+
+  productName: {
+    type: String,
+    required: true,
+  },
+
+  productImage: {
+    type: String,
   },
 
   supplier: {
@@ -13,12 +28,7 @@ const StockInSchema = new Schema({
     ref: "supplier",
   },
 
-  expiry_date: {
-    type: String,
-    required: true,
-  },
-
-  quantity: {
+  quantity_in: {
     type: Number,
     required: true,
   },

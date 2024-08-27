@@ -13,6 +13,7 @@ app.use(express.json());
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/supplier", require("./routes/supplier"));
 app.use("/api/product", require("./routes/product"));
+app.use("/api/stock", require("./routes/stock"));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
