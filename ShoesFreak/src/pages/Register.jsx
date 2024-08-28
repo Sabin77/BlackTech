@@ -90,37 +90,37 @@ function Register() {
               className=" flex flex-col flex-1 m-2 space-y-4 mt-10"
               onSubmit={handleSubmit}
             >
-              <label> Full Name</label>
+              <label className=" text-gray-500"> Full Name</label>
 
               <input
                 type="text"
                 name="name"
                 value={userDetails.name}
                 onChange={handleChange}
-                className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
+                className="border-solid border-2 border-gray-300 focus:border-gray-500 h-8 focus:outline-none pl-2  "
                 required
               />
 
-              <label> Email</label>
+              <label className=" text-gray-500"> Email</label>
               <input
                 type="email"
                 name="email"
                 value={userDetails.email}
                 onChange={handleChange}
-                className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
+                className="border-solid border-2 border-gray-300 focus:border-gray-500 h-8 focus:outline-none pl-2  "
                 required
               />
 
-              <label> Password</label>
+              <label className=" text-gray-500"> Password</label>
               <input
                 type="password"
                 name="password"
                 value={userDetails.password}
                 onChange={handleChange}
-                className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
+                className="border-solid border-2 border-gray-300 focus:border-gray-500 h-8 focus:outline-none pl-2  "
               />
 
-              <button className=" border-2 px-4 py-1 w-fit self-center  rounded-full hover:text-white hover:bg-[#5FBF8F]">
+              <button className=" border-2 px-4 py-1 w-fit self-center text-gray-500  rounded-full hover:text-white hover:bg-[#5FBF8F]">
                 {" "}
                 SIGN UP
               </button>

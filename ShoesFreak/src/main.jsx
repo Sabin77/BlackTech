@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import App from "./App.jsx";
 import "./index.css";
 import {
@@ -45,9 +46,9 @@ const router = createBrowserRouter(
 );
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Auth0Provider>
+  <GoogleOAuthProvider clientId="254458563396-vj79elove1hropa44crgupi3f069vkrr.apps.googleusercontent.com">
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  </Auth0Provider>
+  </GoogleOAuthProvider>
 );

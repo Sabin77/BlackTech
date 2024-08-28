@@ -106,9 +106,9 @@ function EditStockIn({ stockIn, closeEdit }) {
       <div className=" flex fixed  justify-center items-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
         <div className="flex flex-col rounded-lg border-2 bg-white">
           <div className=" flex relative justify-center items-center border-2 bg-[#458D69] rounded-t-lg w-full h-20">
-            <p className=" font-semibold text-white  text-3xl">Edit Product</p>
+            <p className=" font-semibold text-white  text-3xl">Edit Stock</p>
             <GiCrossedBones
-              className=" absolute right-4 top-2 text-xl text-white cursor-pointer"
+              className=" absolute right-4 top-2  text-white cursor-pointer"
               onClick={closeEdit}
             />
           </div>
@@ -117,45 +117,55 @@ function EditStockIn({ stockIn, closeEdit }) {
             onSubmit={handleSubmit}
           >
             <div className=" flex">
-              <Combobox
-                className="w-[250px]"
-                data={Array.isArray(productDetails) ? productDetails : []}
-                textField="name"
-                renderListItem={({ item }) => (
-                  <div className=" flex items-center border-b-2">
-                    <img
-                      src={item.productImage ? item.productImage : DefaultImg}
-                      className=" w-6 h-6 m-3"
-                    />
-                    {" " + item.name}
-                  </div>
-                )}
-                filter="contains"
-                onChange={(value) =>
-                  setStockInDetails({
-                    ...stockInDetails,
-                    productId: value._id,
-                    productName: value.name,
-                    productImage: value.productImage,
-                  })
-                }
-              />
+              <div className=" flex flex-col">
+                <span>Product Name</span>
+                <Combobox
+                  className="w-[250px] mx-2"
+                  data={Array.isArray(productDetails) ? productDetails : []}
+                  textField="name"
+                  renderListItem={({ item }) => (
+                    <div className=" flex items-center border-b-2">
+                      <img
+                        src={item.productImage ? item.productImage : DefaultImg}
+                        className=" w-6 h-6 m-3"
+                      />
+                      {" " + item.name}
+                    </div>
+                  )}
+                  filter="contains"
+                  defaultValue={stockIn.productName}
+                  onChange={(value) =>
+                    setStockInDetails({
+                      ...stockInDetails,
+                      productId: value._id,
+                      productName: value.name,
+                      productImage: value.productImage,
+                    })
+                  }
+                />
+              </div>
 
-              <Combobox
-                className="w-[250px]"
-                data={Array.isArray(supplierName) ? supplierName : []}
-                textField="name"
-                renderListItem={({ item }) => (
-                  <div className=" flex items-center border-b-2">
-                    <img src={item.companylogo} className=" w-6 h-6 m-3" />
-                    {" " + item.name}
-                  </div>
-                )}
-                filter="contains"
-                onChange={(value) =>
-                  setStockInDetails({ ...stockInDetails, supplier: value._id })
-                }
-              />
+              <div className=" flex flex-col">
+                <span>Supplier Name</span>
+                <Combobox
+                  className="w-[250px] mx-2"
+                  data={Array.isArray(supplierName) ? supplierName : []}
+                  textField="name"
+                  renderListItem={({ item }) => (
+                    <div className=" flex items-center border-b-2">
+                      <img src={item.companylogo} className=" w-6 h-6 m-3" />
+                      {" " + item.name}
+                    </div>
+                  )}
+                  filter="contains"
+                  onChange={(value) =>
+                    setStockInDetails({
+                      ...stockInDetails,
+                      supplier: value._id,
+                    })
+                  }
+                />
+              </div>
             </div>
 
             <div className=" flex">
@@ -166,7 +176,7 @@ function EditStockIn({ stockIn, closeEdit }) {
                   type="number"
                   value={stockInDetails.quantity_in}
                   onChange={handleChange}
-                  className="flex-1 border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
+                  className="flex-1 border-solid border-2 rounded-md border-gray-200 focus:border-gray-400 h-8 focus:outline-none pl-2  "
                 />
               </div>
 
@@ -177,16 +187,18 @@ function EditStockIn({ stockIn, closeEdit }) {
                   name="price"
                   value={stockInDetails.price}
                   onChange={handleChange}
-                  className=" flex-1 border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
+                  className=" flex-1 border-solid border-2 rounded-md border-gray-200 focus:border-gray-400 h-8 focus:outline-none pl-2  "
                   required
                 />
               </div>
             </div>
 
-            <button className=" border-2 px-4 py-1 w-fit self-center  rounded-full hover:text-white hover:bg-[#5FBF8F]">
-              {" "}
-              Edit
-            </button>
+            <div className=" flex justify-center ">
+              <button className=" border-2 px-4 py-1 w-fit self-center  rounded-full hover:text-white hover:bg-[#5FBF8F]">
+                {" "}
+                Edit
+              </button>
+            </div>
             {errorMsg && <div className=" text-red-500 mt-2">{errorMsg}</div>}
           </form>
         </div>

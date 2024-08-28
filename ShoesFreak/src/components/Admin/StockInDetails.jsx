@@ -59,7 +59,7 @@ function StockInDetails({ stockIn, closeDetails }) {
 
             <div className=" flex  w-full">
               <div className=" flex flex-col pl-5  mx-2 h-16">
-                <label> Supplier Name</label>
+                <label> Supplier Id</label>
                 <p className=" text-gray-500">{stockInDetails.supplier}</p>
               </div>
             </div>

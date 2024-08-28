@@ -31,11 +31,11 @@ function App() {
       {role === "admin" ? (
         <Dashboard />
       ) : (
-        <CartContext.Provider>
+        <>
           <Navbar user={user} cartAmount={cartAmount} />
           <Outlet />
           <Footer />
-        </CartContext.Provider>
+        </>
       )}
     </>
   );
