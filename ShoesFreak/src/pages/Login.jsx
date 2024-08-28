@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "@/config/Config";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
 const apiUrl = import.meta.env.VITE_API_URL_AUTH;
@@ -60,26 +62,37 @@ function Login() {
               className=" flex flex-col flex-1 m-2 space-y-4 mt-10"
               onSubmit={handleSubmit}
             >
-              <label> Email</label>
+              <label className=" text-gray-500"> Email</label>
               <input
                 type="email"
                 name="email"
                 value={userDetails.email}
                 onChange={handleChange}
-                className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
+                className="border-solid border-2 text-gray-500 border-gray-300 focus:border-gray-500 h-8 focus:outline-none pl-2  "
                 required
               />
 
-              <label> Password</label>
+              <label className=" text-gray-500"> Password</label>
               <input
                 type="password"
                 name="password"
                 value={userDetails.password}
                 onChange={handleChange}
-                className="border-solid border-2 border-[#9ec0af] focus:border-[#458D69] h-8 focus:outline-none pl-2  "
+                className="border-solid border-2 text-gray-500 border-gray-300 focus:border-gray-500 h-8 focus:outline-none pl-2  "
               />
 
-              <button className=" border-2 px-4 py-1 w-fit self-center  rounded-full hover:text-white hover:bg-[#5FBF8F]">
+              <p className=" underline cursor-pointer"> Forgot password</p>
+
+              <div className="flex">
+                <p className="  text-gray-500"> Don't have an account?</p>
+                <Link to="/register">
+                  <p className=" underline cursor-pointer mx-2">
+                    Register here
+                  </p>
+                </Link>
+              </div>
+
+              <button className=" border-2 px-4 py-1 w-fit self-center shadow-md  rounded-full hover:text-white hover:bg-[#5FBF8F]">
                 {" "}
                 LOG IN
               </button>
@@ -89,6 +102,17 @@ function Login() {
                 </>
               )}
             </form>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                const credentialResponseDecoded = jwtDecode(
+                  credentialResponse.credential
+                );
+                console.log(credentialResponseDecoded);
+              }}
+              onError={() => {
+                console.log("Login Failed");
+              }}
+            />
           </div>
         </div>
         <div className=" w-[400px]  rounded-r-3xl text-white bg-[#5FBF8F]">

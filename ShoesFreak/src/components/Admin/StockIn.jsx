@@ -39,6 +39,7 @@ import DefaultImg from "../../assets/default_shoes.png";
 import AddStockIn from "./AddStockIn";
 import StockInDetails from "./StockInDetails";
 import EditStockIn from "./EditStockIn";
+import DeleteStockIn from "./DeleteStockIn";
 
 function StockIn() {
   const [stockIn, setStockIn] = useState([]);
@@ -239,9 +240,9 @@ function StockIn() {
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter product..."
-            value={table.getColumn("name")?.getFilterValue() ?? ""}
+            value={table.getColumn("productName")?.getFilterValue() ?? ""}
             onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
+              table.getColumn("productName")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
@@ -364,7 +365,7 @@ function StockIn() {
           />
         )}
         {showDelete && (
-          <DeleteProduct
+          <DeleteStockIn
             showDelete={showDelete}
             stockIn={selectedProduct}
             closeDelete={closeDelete}
