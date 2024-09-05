@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { GiCrossedBones } from "react-icons/gi";
 import axios from "axios";
 
-function DeleteStockIn({ closeDelete, stockIn }) {
-  console.log(stockIn);
+function DeleteStockIn({ closeDelete, stock }) {
+  console.log(stock);
 
   const deletestock = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/stock/deletestock/${stockIn._id}`,
+        `http://localhost:5000/api/stock/deletestock/${stock._id}`,
         {
           headers: {
             Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,

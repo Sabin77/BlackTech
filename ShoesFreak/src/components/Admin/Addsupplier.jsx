@@ -18,7 +18,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-function Addsupplier({ closeModal }) {
+function Addsupplier({ closeModal, updateData }) {
   const imageRef = useRef(0);
 
   const [supplierDetails, setSupplierDetails] = useState({
@@ -30,7 +30,7 @@ function Addsupplier({ closeModal }) {
   });
 
   const [logo, setLogo] = useState(null);
-
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [errorMsg, setErrorMsg] = useState();
 
   const handleFileChange = (e) => {
@@ -73,6 +73,7 @@ function Addsupplier({ closeModal }) {
         address: "",
         companyname: "",
       });
+      setIsSheetOpen(false);
       closeModal();
     } catch (error) {
       setErrorMsg(error.message);
@@ -80,7 +81,7 @@ function Addsupplier({ closeModal }) {
   };
   return (
     <>
-      <Sheet>
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
           <Button
             variant="outline"
@@ -97,73 +98,73 @@ function Addsupplier({ closeModal }) {
             </SheetDescription>
           </SheetHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
+            <div className="flex flex-col  gap-2">
+              <Label htmlFor="name" className="pl-2 text-[15px]">
+                Name :
               </Label>
               <Input
                 id="name"
                 name="name"
                 onChange={handleChange}
                 value={supplierDetails.name}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
+            <div className="flex flex-col  gap-2">
+              <Label htmlFor="email" className="pl-2 text-[15px]">
+                Email :
               </Label>
               <Input
                 id="email"
                 name="email"
                 onChange={handleChange}
                 value={supplierDetails.email}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
-                Phone
+            <div className="flex flex-col  gap-2">
+              <Label htmlFor="phone" className="pl-2 text-[15px]">
+                Phone :
               </Label>
               <Input
                 id="phone"
                 name="phone"
                 onChange={handleChange}
                 value={supplierDetails.phone}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
-                Address
+            <div className="flex flex-col  gap-2">
+              <Label htmlFor="phone" className="pl-2 text-[15px]">
+                Address :
               </Label>
               <Input
                 id="address"
                 name="address"
                 onChange={handleChange}
                 value={supplierDetails.address}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="companyname" className="text-right">
-                Company
+            <div className="flex flex-col  gap-2">
+              <Label htmlFor="companyname" className="pl-2 text-[15px]">
+                Company :
               </Label>
               <Input
                 id="companyname"
                 name="companyname"
                 onChange={handleChange}
                 value={supplierDetails.companyname}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="companylogo" className="text-right">
+            <div className="flex flex-col  gap-2">
+              <Label htmlFor="companylogo" className="pl-2 text-[15px]">
                 Company logo
               </Label>
               <Input
@@ -171,7 +172,7 @@ function Addsupplier({ closeModal }) {
                 name="logo"
                 type="file"
                 onChange={handleFileChange}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
           </div>

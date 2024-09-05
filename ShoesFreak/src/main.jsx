@@ -8,12 +8,12 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
+  Navigate,
 } from "react-router-dom";
 
 import Login from "./pages/Login.jsx";
 import Layout from "./Layout.jsx";
 import Register from "./pages/Register.jsx";
-import { Auth0Provider } from "@auth0/auth0-react";
 import ProductLists from "./pages/ProductLists.jsx";
 import Cart from "./pages/Cart.jsx";
 import { Provider } from "react-redux";
@@ -21,10 +21,9 @@ import { store } from "./components/State/Store.jsx";
 import ProductDetails from "./pages/ProductDetails2.jsx";
 import KhaltiCheckout from "khalti-checkout-web";
 import Addsupplier from "./components/Admin/Addsupplier.jsx";
-
 import Dashboard from "./components/Admin/Dashboard.jsx";
-import Suppliers from "./components/Admin/Suppliers.jsx";
-import Admin from "./pages/Admin.jsx";
+
+const role = localStorage.getItem("role");
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,13 +32,19 @@ const router = createBrowserRouter(
         <Route index element={<Layout />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path="admin" element={<Dashboard />} />
         <Route path="productlists" element={<ProductLists />} />
         <Route path="cart" element={<Cart />} />
         <Route path="productDetails" element={<ProductDetails />} />
         <Route path="addsupplier" element={<Addsupplier />} />
-
         <Route path="checkout" element={<KhaltiCheckout />} />
+
+        <Route path="admin" element={<Dashboard />}>
+          <Route index element={<Dashboard />} />
+          {/* <Route path="stockin/:id" element={<StockInDetails />} />{" "} */}
+          {/* Nested route for StockInDetails */}
+          {/* <Route path="stockout/:id" element={<StockOutDetails />} />{" "} */}
+          {/* Nested route for StockOutDetails */}
+        </Route>
       </Route>
     </>
   )

@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { GiCrossedBones } from "react-icons/gi";
 import axios from "axios";
 import Combobox from "react-widgets/Combobox";
 import "react-widgets/styles.css";
 import DefaultImg from "../../assets/default_shoes.png";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-function EditStockIn({ stockIn, closeEdit }) {
-  console.log(stockIn);
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+
+function EditStockIn({ stock, closeEdit }) {
+  console.log("Received stock:", stock);
 
   const [productDetails, setProductDetails] = useState([]);
   const [supplierName, setSupplierName] = useState([]);
@@ -14,38 +26,32 @@ function EditStockIn({ stockIn, closeEdit }) {
     productId: "",
     productName: "",
     productImage: "",
-    supplier: "",
+    supplierName: "",
     quantity_in: "",
     price: "",
   });
 
   const [errorMsg, setErrorMsg] = useState("");
 
+  // Fetch product details
   const getProductDetails = async () => {
     try {
       const response = await axios.get(
         "http://localhost:5000/api/product/getallnames"
       );
-      const products = Array.isArray(response.data) ? response.data : [];
-      setProductDetails(products);
-      console.log(response.data);
+      setProductDetails(response.data);
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  useEffect(() => {
-    getProductDetails();
-    getallnames();
-  }, [closeEdit]);
-
-  const getallnames = async () => {
+  // Fetch supplier names
+  const getAllSupplierNames = async () => {
     try {
       const response = await axios.get(
         "http://localhost:5000/api/supplier/getallnames"
       );
       setSupplierName(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error(error.message);
     }
@@ -53,38 +59,50 @@ function EditStockIn({ stockIn, closeEdit }) {
 
   // Initialize form fields with product data when component mounts
   useEffect(() => {
-    if (stockIn) {
+    if (stock) {
       setStockInDetails({
-        productId: stockIn.productId || "",
-        productName: stockIn.productName || "",
-        productImage: stockIn.productImage || "",
-        supplier: stockIn.supplier || "",
-        quantity_in: stockIn.quantity_in || "",
-        price: stockIn.price || "",
+        productId: stock.productId || "",
+        productName: stock.productName || "",
+        productImage: stock.productImage || "",
+        supplierName: stock.supplierName || "",
+        quantity_in: stock.quantity_in || "",
+        price: stock.price || "",
       });
     }
-  }, [stockIn]);
+  }, [stock]);
+
+  // Fetch product and supplier data on component mount
+  useEffect(() => {
+    getProductDetails();
+    getAllSupplierNames();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setStockInDetails({ ...stockInDetails, [name]: value });
+    setStockInDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("handleSubmit triggered");
 
     const data = {
       productId: stockInDetails.productId,
       productName: stockInDetails.productName,
       productImage: stockInDetails.productImage,
-      supplier: stockInDetails.supplier,
+      supplierName: stockInDetails.supplierName,
       quantity_in: stockInDetails.quantity_in,
       price: stockInDetails.price,
     };
 
+    console.log("Submitting data:", data);
+
     try {
-      const response = await axios.put(
-        `http://localhost:5000/api/stock/updatestockin/${stockIn._id}`,
+      await axios.put(
+        `http://localhost:5000/api/stock/updatestockinhistory/${stock._id}`,
         data,
         {
           headers: {
@@ -92,9 +110,7 @@ function EditStockIn({ stockIn, closeEdit }) {
           },
         }
       );
-
-      console.log("Form submitted successfully:", response.data);
-      closeEdit(); // Close the modal after successful submission
+      closeEdit(); // Notify parent to close
     } catch (error) {
       setErrorMsg(error.message);
     }
@@ -102,107 +118,115 @@ function EditStockIn({ stockIn, closeEdit }) {
 
   return (
     <>
-      <div className="modal-wrapper fixed inset-0  bg-blur"></div>
-      <div className=" flex fixed  justify-center items-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
-        <div className="flex flex-col rounded-lg border-2 bg-white">
-          <div className=" flex relative justify-center items-center border-2 bg-[#458D69] rounded-t-lg w-full h-20">
-            <p className=" font-semibold text-white  text-3xl">Edit Stock</p>
-            <GiCrossedBones
-              className=" absolute right-4 top-2  text-white cursor-pointer"
-              onClick={closeEdit}
-            />
-          </div>
-          <form
-            className=" flex flex-col flex-1 m-2 space-y-4 mt-10"
-            onSubmit={handleSubmit}
-          >
-            <div className=" flex">
-              <div className=" flex flex-col">
-                <span>Product Name</span>
-                <Combobox
-                  className="w-[250px] mx-2"
-                  data={Array.isArray(productDetails) ? productDetails : []}
-                  textField="name"
-                  renderListItem={({ item }) => (
-                    <div className=" flex items-center border-b-2">
-                      <img
-                        src={item.productImage ? item.productImage : DefaultImg}
-                        className=" w-6 h-6 m-3"
-                      />
-                      {" " + item.name}
-                    </div>
-                  )}
-                  filter="contains"
-                  defaultValue={stockIn.productName}
-                  onChange={(value) =>
-                    setStockInDetails({
-                      ...stockInDetails,
-                      productId: value._id,
-                      productName: value.name,
-                      productImage: value.productImage,
-                    })
-                  }
-                />
-              </div>
-
-              <div className=" flex flex-col">
-                <span>Supplier Name</span>
-                <Combobox
-                  className="w-[250px] mx-2"
-                  data={Array.isArray(supplierName) ? supplierName : []}
-                  textField="name"
-                  renderListItem={({ item }) => (
-                    <div className=" flex items-center border-b-2">
-                      <img src={item.companylogo} className=" w-6 h-6 m-3" />
-                      {" " + item.name}
-                    </div>
-                  )}
-                  filter="contains"
-                  onChange={(value) =>
-                    setStockInDetails({
-                      ...stockInDetails,
-                      supplier: value._id,
-                    })
-                  }
-                />
-              </div>
+      <Sheet open={true} onOpenChange={closeEdit}>
+        <SheetContent>
+          <SheetHeader>
+            <SheetTitle>Edit Stock In</SheetTitle>
+            <SheetDescription>
+              Enter the details of the stock correctly.
+            </SheetDescription>
+          </SheetHeader>
+          <form className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="productName" className="text-right">
+                Product Name
+              </Label>
+              <Combobox
+                className="w-[250px]"
+                data={productDetails}
+                textField="name"
+                disabled
+                renderListItem={({ item }) => (
+                  <div className="flex items-center border-b-2">
+                    <img
+                      src={item.productImage ? item.productImage : DefaultImg}
+                      className="w-6 h-6 m-3"
+                      alt="product"
+                    />
+                    {" " + item.name}
+                  </div>
+                )}
+                filter="contains"
+                value={stock.productName}
+                onChange={(value) =>
+                  setStockInDetails({
+                    ...stockInDetails,
+                    productId: value._id,
+                    productName: value.name,
+                    productImage: value.productImage,
+                  })
+                }
+              />
             </div>
 
-            <div className=" flex">
-              <div className=" flex flex-1 flex-col mx-2 h-16">
-                <label> Quantity In</label>
-                <input
-                  name="quantity_in"
-                  type="number"
-                  value={stockInDetails.quantity_in}
-                  onChange={handleChange}
-                  className="flex-1 border-solid border-2 rounded-md border-gray-200 focus:border-gray-400 h-8 focus:outline-none pl-2  "
-                />
-              </div>
-
-              <div className=" flex flex-1 flex-col mx-2 h-16">
-                <label> Price</label>
-                <input
-                  type="number"
-                  name="price"
-                  value={stockInDetails.price}
-                  onChange={handleChange}
-                  className=" flex-1 border-solid border-2 rounded-md border-gray-200 focus:border-gray-400 h-8 focus:outline-none pl-2  "
-                  required
-                />
-              </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="supplierName" className="text-right">
+                Supplier Name
+              </Label>
+              <Combobox
+                className="w-[250px]"
+                data={supplierName}
+                textField="name"
+                renderListItem={({ item }) => (
+                  <div className="flex items-center border-b-2">
+                    <img
+                      src={item.companylogo}
+                      className="w-6 h-6 m-3"
+                      alt="supplier"
+                    />
+                    {" " + item.name}
+                  </div>
+                )}
+                filter="contains"
+                defaultValue={stock.supplierName}
+                onChange={(value) =>
+                  setStockInDetails({
+                    ...stockInDetails,
+                    supplierId: value._id,
+                    supplierName: value.name,
+                  })
+                }
+              />
             </div>
 
-            <div className=" flex justify-center ">
-              <button className=" border-2 px-4 py-1 w-fit self-center  rounded-full hover:text-white hover:bg-[#5FBF8F]">
-                {" "}
-                Edit
-              </button>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="quantity_in" className="text-right">
+                Quantity In
+              </Label>
+              <Input
+                id="quantity_in"
+                name="quantity_in"
+                onChange={handleChange}
+                value={stockInDetails.quantity_in}
+                className="col-span-3"
+              />
             </div>
-            {errorMsg && <div className=" text-red-500 mt-2">{errorMsg}</div>}
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="price" className="text-right">
+                Price
+              </Label>
+              <Input
+                id="price"
+                name="price"
+                onChange={handleChange}
+                value={stockInDetails.price}
+                className="col-span-3"
+              />
+            </div>
+            {errorMsg && (
+              <div className="text-red-500 text-center mt-2">{errorMsg}</div>
+            )}
+            <SheetFooter>
+              <SheetClose asChild>
+                <Button type="submit" onClick={handleSubmit}>
+                  Save changes
+                </Button>
+              </SheetClose>
+            </SheetFooter>
           </form>
-        </div>
-      </div>
+        </SheetContent>
+      </Sheet>
     </>
   );
 }

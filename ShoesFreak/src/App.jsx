@@ -23,8 +23,13 @@ function App() {
   console.log(token);
 
   useEffect(() => {
-    navigate("/login");
-  }, []);
+    // If there's no token, navigate to login
+    if (!token) {
+      navigate("/login");
+    } else if (role === "admin") {
+      navigate("/admin");
+    }
+  }, [token, role, navigate]);
 
   return (
     <>

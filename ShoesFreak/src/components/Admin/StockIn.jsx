@@ -32,9 +32,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import ProductDetails from "./ProductDetails";
-import EditProduct from "./EditProduct";
-import DeleteProduct from "./DeleteProduct";
 import DefaultImg from "../../assets/default_shoes.png";
 import AddStockIn from "./AddStockIn";
 import StockInDetails from "./StockInDetails";
@@ -66,7 +63,19 @@ function StockIn() {
           },
         }
       );
-      setStockIn(response.data);
+      const groupedStockIn = response.data.reduce((acc, item) => {
+        const existingProduct = acc.find(
+          (product) => product.productName === item.productName
+        );
+        if (existingProduct) {
+          existingProduct.quantity_in += item.quantity_in;
+        } else {
+          acc.push({ ...item });
+        }
+        return acc;
+      }, []);
+
+      setStockIn(groupedStockIn);
       // console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -77,7 +86,7 @@ function StockIn() {
     getallstockin();
   }, [showEdit, showDelete]);
 
-  const handleDetailsClick = (stockIn) => {
+  const handleRowClick = (stockIn) => {
     setSelectedProduct(stockIn);
     setShowDetails(true);
   };
@@ -139,7 +148,7 @@ function StockIn() {
               : row.getValue("productImage")
           }
           alt="Company Logo"
-          className="h-10 w-10 object-cover"
+          className="h-10 w-10 object-cover ml-5"
         />
       ),
     },
@@ -156,62 +165,62 @@ function StockIn() {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="capitalize ml-4">{row.getValue("productName")}</div>
+        <div className="capitalize ml-5">{row.getValue("productName")}</div>
       ),
     },
     {
       accessorKey: "quantity_in",
       header: "Quantity In",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("quantity_in")}</div>
+        <div className="capitalize ml-5">{row.getValue("quantity_in")}</div>
       ),
     },
 
-    {
-      accessorKey: "price",
-      header: "Price",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("price")}</div>
-      ),
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const payment = row.original;
+    // {
+    //   accessorKey: "price",
+    //   header: "Price",
+    //   cell: ({ row }) => (
+    //     <div className="capitalize">{row.getValue("price")}</div>
+    //   ),
+    // },
+    // {
+    //   id: "actions",
+    //   enableHiding: false,
+    //   cell: ({ row }) => {
+    //     const payment = row.original;
 
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => handleDetailsClick(row.original)}
-              >
-                View Details
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
+    //     return (
+    //       <DropdownMenu>
+    //         <DropdownMenuTrigger asChild>
+    //           <Button variant="ghost" className="h-8 w-8 p-0">
+    //             <span className="sr-only">Open menu</span>
+    //             <MoreHorizontal className="h-4 w-4" />
+    //           </Button>
+    //         </DropdownMenuTrigger>
+    //         <DropdownMenuContent align="end">
+    //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+    //           <DropdownMenuItem
+    //             onClick={() => handleDetailsClick(row.original)}
+    //           >
+    //             View Details
+    //           </DropdownMenuItem>
+    //           <DropdownMenuSeparator />
 
-              <DropdownMenuItem onClick={() => handleEditClick(row.original)}>
-                Edit
-              </DropdownMenuItem>
+    //           <DropdownMenuItem onClick={() => handleEditClick(row.original)}>
+    //             Edit
+    //           </DropdownMenuItem>
 
-              <DropdownMenuItem
-                onClick={() => handleDeleteClick(row.original)}
-                className=" text-red-500"
-              >
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
+    //           <DropdownMenuItem
+    //             onClick={() => handleDeleteClick(row.original)}
+    //             className=" text-red-500"
+    //           >
+    //             Delete
+    //           </DropdownMenuItem>
+    //         </DropdownMenuContent>
+    //       </DropdownMenu>
+    //     );
+    //   },
+    // },
   ];
 
   const table = useReactTable({
@@ -236,125 +245,134 @@ function StockIn() {
 
   return (
     <div className=" flex flex-col space-y-4 ">
-      <div className=" bg-white h-screen m-4 p-4 rounded-md">
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Filter product..."
-            value={table.getColumn("productName")?.getFilterValue() ?? ""}
-            onChange={(event) =>
-              table.getColumn("productName")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-
-            <AddStockIn closeModal={closeModal} updateData={getallstockin} />
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-        {showDetails && (
+      <div className=" bg-white  m-4 p-4 rounded-md">
+        {showDetails && selectedProduct ? (
           <StockInDetails
-            showDetails={showDetails}
             stockIn={selectedProduct}
-            closeDetails={closeDetails}
+            closeDetails={() => setSelectedProduct(null)}
           />
+        ) : (
+          <>
+            <div className="flex items-center py-4">
+              <Input
+                placeholder="Filter product..."
+                value={table.getColumn("productName")?.getFilterValue() ?? ""}
+                onChange={(event) =>
+                  table
+                    .getColumn("productName")
+                    ?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Columns <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <AddStockIn
+                  closeModal={closeModal}
+                  updateData={getallstockin}
+                />
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => {
+                        return (
+                          <TableHead key={header.id}>
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </TableHead>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && "selected"}
+                        onClick={() => handleRowClick(row.original)}
+                        className="cursor-pointer"
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="h-24 text-center"
+                      >
+                        No results.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+            <div className="flex items-center justify-end space-x-2 py-4">
+              <div className="flex-1 text-sm text-muted-foreground">
+                {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                {table.getFilteredRowModel().rows.length} row(s) selected.
+              </div>
+              <div className="space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          </>
         )}
 
         {showEdit && (

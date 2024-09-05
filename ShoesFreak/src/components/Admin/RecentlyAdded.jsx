@@ -25,7 +25,7 @@ function RecentlyAdded({ suppliers }) {
     <div className=" shadow-md rounded-lg w-1/2 bg-white overflow-y-scroll">
       <h1 className=" m-5 font-semibold text-xl">Recently Added</h1>
       {sortedSuppliers.map((supplier) => (
-        <div className=" border-2 m-4 rounded-lg shadow-md " key={supplier._id}>
+        <div className=" border-b-2 m-4   " key={supplier._id}>
           <div className=" flex items-center h-16">
             <div className=" border-2 h-10 w-10 rounded-full m-2">
               {" "}
