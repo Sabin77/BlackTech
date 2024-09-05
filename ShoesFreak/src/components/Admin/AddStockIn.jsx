@@ -27,7 +27,9 @@ function AddStockIn({ closeModal, updateData }) {
     productId: "",
     productName: "",
     productImage: "",
-    supplier: "",
+    supplierId: "",
+    supplierName: "",
+
     quantity_in: "",
     price: "",
   });
@@ -78,7 +80,8 @@ function AddStockIn({ closeModal, updateData }) {
       productId: stockInDetails.productId,
       productName: stockInDetails.productName,
       productImage: stockInDetails.productImage,
-      supplier: stockInDetails.supplier,
+      supplierId: stockInDetails.supplierId,
+      supplierName: stockInDetails.supplierName,
       quantity_in: stockInDetails.quantity_in,
       price: stockInDetails.price,
     };
@@ -101,7 +104,8 @@ function AddStockIn({ closeModal, updateData }) {
         productId: "",
         productName: "",
         productImage: "",
-        supplier: "",
+        supplierId: "",
+        supplierName: "",
         quantity_in: "",
         price: "",
       });
@@ -129,26 +133,26 @@ function AddStockIn({ closeModal, updateData }) {
               Enter the details of the stock correctly.
             </SheetDescription>
           </SheetHeader>
-          <form className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Batch Id
+          <form className="grid gap-5 py-4 pl-4">
+            <div className="flex flex-col  gap-3">
+              <Label htmlFor="name" className="pl-2 text-[15px]">
+                Batch Id :
               </Label>
               <Input
                 id="batch_id"
                 name="batch_id"
                 onChange={handleChange}
                 value={stockInDetails.batch_id}
-                className="col-span-3"
+                className="col-span-2 w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="supplierName" className="text-right">
-                Product Name
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="supplierName" className="pl-2 text-[15px]">
+                Product Name :
               </Label>
               <Combobox
-                className="w-[250px]"
+                className="w-[300px]"
                 data={Array.isArray(productDetails) ? productDetails : []}
                 textField="name"
                 renderListItem={({ item }) => (
@@ -172,12 +176,12 @@ function AddStockIn({ closeModal, updateData }) {
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="supplierName" className="text-right">
-                Supplier Name
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="supplierName" className="pl-2 text-[15px]">
+                Supplier Name :
               </Label>
               <Combobox
-                className="w-[250px]"
+                className="w-[300px]"
                 data={Array.isArray(supplierName) ? supplierName : []}
                 textField="name"
                 renderListItem={({ item }) => (
@@ -188,40 +192,44 @@ function AddStockIn({ closeModal, updateData }) {
                 )}
                 filter="contains"
                 onChange={(value) =>
-                  setStockInDetails({ ...stockInDetails, supplier: value._id })
+                  setStockInDetails({
+                    ...stockInDetails,
+                    supplierId: value._id,
+                    supplierName: value.name,
+                  })
                 }
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
-                Quantity In
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="phone" className="pl-2 text-[15px]">
+                Quantity In :
               </Label>
               <Input
                 id="quantity_in"
                 name="quantity_in"
                 onChange={handleChange}
                 value={stockInDetails.quantity_in}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="productImage" className="text-right">
-                Price
+            <div className="flex flex-col gap-3">
+              <Label htmlFor="productImage" className="pl-2 text-[15px]">
+                Price :
               </Label>
               <Input
                 id="price"
                 name="price"
                 onChange={handleChange}
                 value={stockInDetails.price}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
           </form>
           <SheetFooter>
             <SheetClose asChild>
-              <Button type="submit" onClick={handleSubmit}>
+              <Button type="submit" onClick={handleSubmit} className=" mt-3">
                 Save changes
               </Button>
             </SheetClose>

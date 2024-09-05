@@ -224,7 +224,7 @@ function Suppliers() {
 
   return (
     <div className=" flex flex-col space-y-4 ">
-      <div className=" bg-white h-screen m-4 p-4 rounded-md">
+      <div className=" bg-white  m-4 p-4 rounded-md">
         <div className="flex items-center py-4">
           <Input
             placeholder="Filter emails..."
@@ -241,7 +241,7 @@ function Suppliers() {
               </Button>
             </DropdownMenuTrigger>
 
-            <Addsupplier closeModal={closeModal} />
+            <Addsupplier closeModal={closeModal} updateData={getallsuppliers} />
 
             <DropdownMenuContent align="end">
               {table

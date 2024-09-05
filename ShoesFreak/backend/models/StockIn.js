@@ -23,9 +23,14 @@ const StockInSchema = new Schema({
     type: String,
   },
 
-  supplier: {
+  supplierId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "supplier",
+  },
+
+  supplierName: {
+    type: String,
+    required: true,
   },
 
   quantity_in: {

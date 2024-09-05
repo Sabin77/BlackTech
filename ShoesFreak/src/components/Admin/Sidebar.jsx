@@ -28,7 +28,7 @@ function Sidebar({ setSelectedOption, activeOption }) {
   };
 
   return (
-    <div className="flex flex-col w-72 border-r-2 ">
+    <div className="flex flex-col w-72 h-screen ">
       <div className="font-semibold text-2xl pt-5 pl-2 text-[#5FBF8F]">
         ShoesFreak
       </div>

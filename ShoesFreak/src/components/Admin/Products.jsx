@@ -38,7 +38,7 @@ import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
 import DefaultImg from "../../assets/default_shoes.png";
 
-function Suppliers() {
+function Products() {
   const [products, setProducts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -372,4 +372,4 @@ function Suppliers() {
   );
 }
 
-export default Suppliers;
+export default Products;

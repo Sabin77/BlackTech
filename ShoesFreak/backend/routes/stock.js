@@ -24,7 +24,8 @@ router.post(
         productId,
         productName,
         productImage,
-        supplier,
+        supplierId,
+        supplierName,
         quantity_in,
         price,
       } = req.body;
@@ -40,7 +41,8 @@ router.post(
         productId,
         productName,
         productImage,
-        supplier,
+        supplierId,
+        supplierName,
         quantity_in,
         price,
         user: req.user.id,
@@ -156,6 +158,78 @@ router.delete(
       stock = await StockIn.findByIdAndDelete(req.params.id);
 
       res.json({ message: "Product deleted successfully" });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
+
+// ROUTE:  // Fetch stock-in history for a specific product using: GET "/api/stock/getstockinhistory/:productId". Login required
+router.get(
+  "/getstockinhistory/:productId",
+  fetchuser,
+  authMiddleware,
+  adminMiddleware,
+
+  async (req, res) => {
+    try {
+      const { productId } = req.params;
+
+      // Find all stock-in entries for the given productId
+      const stockInHistory = await StockIn.find({ productId });
+
+      if (!stockInHistory || stockInHistory.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "No stock-in history found for this product." });
+      }
+
+      res.json(stockInHistory);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
+
+router.put(
+  "/updatestockinhistory/:id",
+  fetchuser,
+  authMiddleware,
+  adminMiddleware,
+
+  async (req, res) => {
+    const { supplierName, quantity_in, price } = req.body;
+
+    // Create a newStock object
+    const newStock = {};
+
+    if (supplierName) {
+      newStock.supplierName = supplierName;
+    }
+    if (quantity_in) {
+      newStock.quantity_in = quantity_in;
+    }
+    if (price) {
+      newStock.price = price;
+    }
+
+    try {
+      // Find the stock to be updated and update it
+      let stock = await StockIn.findById(req.params.id); // Await the find operation
+
+      if (!stock) {
+        return res.status(404).send("Stock not found");
+      }
+
+      stock = await StockIn.findByIdAndUpdate(
+        req.params.id,
+        { $set: newStock },
+        { new: true }
+      );
+
+      res.json({ stock });
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal Server Error");

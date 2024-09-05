@@ -102,7 +102,10 @@ function Login() {
                 </>
               )}
             </form>
+
+            {/* <p className=" flex justify-center my-4"> OR</p>
             <GoogleLogin
+              className=" flex justify-center my-4"
               onSuccess={(credentialResponse) => {
                 const credentialResponseDecoded = jwtDecode(
                   credentialResponse.credential
@@ -112,7 +115,7 @@ function Login() {
               onError={() => {
                 console.log("Login Failed");
               }}
-            />
+            /> */}
           </div>
         </div>
         <div className=" w-[400px]  rounded-r-3xl text-white bg-[#5FBF8F]">

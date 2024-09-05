@@ -118,8 +118,8 @@ function AddProduct({ closeModal, updateData }) {
             </SheetDescription>
           </SheetHeader>
           <form className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
+            <div className="flex flex-col  gap-3">
+              <Label htmlFor="name" className="pl-2 text-[15px]">
                 Product Name
               </Label>
               <Input
@@ -127,12 +127,12 @@ function AddProduct({ closeModal, updateData }) {
                 name="name"
                 onChange={handleChange}
                 value={productDetails.name}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
+            <div className="flex flex-col  gap-3">
+              <Label htmlFor="email" className="pl-2 text-[15px]">
                 Description
               </Label>
               <Input
@@ -140,12 +140,12 @@ function AddProduct({ closeModal, updateData }) {
                 name="description"
                 onChange={handleChange}
                 value={productDetails.description}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
+            <div className="flex flex-col  gap-3">
+              <Label htmlFor="phone" className="pl-2 text-[15px]">
                 Color
               </Label>
               <Input
@@ -153,12 +153,12 @@ function AddProduct({ closeModal, updateData }) {
                 name="color"
                 onChange={handleChange}
                 value={productDetails.color}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
+            <div className="flex flex-col  gap-3">
+              <Label htmlFor="phone" className="pl-2 text-[15px]">
                 Quantity Limit
               </Label>
               <Input
@@ -166,12 +166,12 @@ function AddProduct({ closeModal, updateData }) {
                 name="quantity_limit"
                 onChange={handleChange}
                 value={productDetails.quantity_limit}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="productImage" className="text-right">
+            <div className="flex flex-col  gap-3">
+              <Label htmlFor="productImage" className="pl-2 text-[15px]">
                 Product Image
               </Label>
               <Input
@@ -179,16 +179,16 @@ function AddProduct({ closeModal, updateData }) {
                 name="image"
                 type="file"
                 onChange={handleFileChange}
-                className="col-span-3"
+                className="w-[300px]"
               />
             </div>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="supplierName" className="text-right">
+            <div className="flex flex-col  gap-3">
+              <Label htmlFor="supplierName" className="pl-2 text-[15px]">
                 Supplier Name
               </Label>
               <Combobox
-                className="w-[250px]"
+                className="w-[300px]"
                 data={supplierName}
                 textField="name"
                 renderListItem={({ item }) => (
@@ -206,7 +206,7 @@ function AddProduct({ closeModal, updateData }) {
           </form>
           <SheetFooter>
             <SheetClose asChild>
-              <Button type="submit" onClick={handleSubmit}>
+              <Button type="submit" onClick={handleSubmit} className=" mt-3">
                 Save changes
               </Button>
             </SheetClose>

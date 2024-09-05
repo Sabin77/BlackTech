@@ -22,6 +22,7 @@ import CustomerLineChart from "./ProductLineChart";
 import CustomerBar from "./ProductBarChart";
 import StockIn from "./StockIn";
 import StockOut from "./StockOut";
+import { Outlet } from "react-router-dom";
 
 function Dashboard() {
   const [selectedOption, setSelectedOption] = useState("Dashboard");
