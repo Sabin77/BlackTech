@@ -37,6 +37,7 @@ import ProductDetails from "./ProductDetails";
 import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
 import DefaultImg from "../../assets/default_shoes.png";
+import AddStockOut from "./AddStockOut";
 
 function StockOut() {
   const [stockOut, setStockOut] = useState([]);
@@ -250,7 +251,7 @@ function StockOut() {
               </Button>
             </DropdownMenuTrigger>
 
-            <AddProduct closeModal={closeModal} updateData={getallsuppliers} />
+            <AddStockOut closeModal={closeModal} updateData={getallsuppliers} />
             <DropdownMenuContent align="end">
               {table
                 .getAllColumns()

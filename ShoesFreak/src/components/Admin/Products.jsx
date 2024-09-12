@@ -56,12 +56,7 @@ function Products() {
   const getallsuppliers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/product/getallproducts",
-        {
-          headers: {
-            Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
-          },
-        }
+        "http://localhost:5000/api/product/getallproducts"
       );
       setProducts(response.data);
       // console.log(response.data);

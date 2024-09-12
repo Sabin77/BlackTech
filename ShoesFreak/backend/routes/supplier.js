@@ -76,6 +76,7 @@ router.get(
 
 router.put(
   "/updatesupplier/:id",
+  fetchuser,
   authMiddleware,
   adminMiddleware,
   upload.single("companylogo"),

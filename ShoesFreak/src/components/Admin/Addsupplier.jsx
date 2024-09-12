@@ -59,7 +59,7 @@ function Addsupplier({ closeModal, updateData }) {
         data,
         {
           headers: {
-            Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
+            Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZlMDY3ZTY2YWQwMmRiMGM0YzRlNWRhIn0sImlhdCI6MTcyNjAyODMzMn0.ti2ZPfeBPBSx1DPYafkulMztxtR5oph9aoPZ3OQ5JH8`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -74,7 +74,8 @@ function Addsupplier({ closeModal, updateData }) {
         companyname: "",
       });
       setIsSheetOpen(false);
-      closeModal();
+      closeModal()
+      updateData();
     } catch (error) {
       setErrorMsg(error.message);
     }

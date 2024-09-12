@@ -47,7 +47,7 @@ router.post(
 
       // Access the uploaded file (product_image)
       const product_image = req.file;
-      console.log(req.file);
+      
 
       const product = new Product({
         name,

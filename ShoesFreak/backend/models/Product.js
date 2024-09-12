@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { type } = require("server/reply");
 const { Schema } = mongoose;
 
 const ProductSchema = new Schema({

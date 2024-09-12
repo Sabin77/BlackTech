@@ -54,3 +54,11 @@
   /* Adjust the blur amount as needed */
 }
 
+.combobox-container .rw-popup-container {
+  position: absolute;
+  bottom: 100%; /* Positions the dropdown above */
+  margin-bottom: 8px; /* Adds spacing between the combobox and dropdown */
+  z-index: 10; /* Ensures the dropdown is visible above other elements */
+  width: 100%; /* Ensures the dropdown is the same width as the combobox */
+}
+

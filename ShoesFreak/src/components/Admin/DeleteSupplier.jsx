@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { GiCrossedBones } from "react-icons/gi";
-import axios from "axios";
+import axios from "../../config/axiosConfig";
 
 function DeleteSupplier({ closeDelete, supplier }) {
   const deleteSupplier = async () => {
     try {
       const response = await axios.delete(
         `http://localhost:5000/api/supplier/deletesupplier/${supplier._id}`,
-        {
-          headers: {
-            Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
-          },
-        }
       );
       closeDelete();
       console.log("Supplier Deleted Successfully");
