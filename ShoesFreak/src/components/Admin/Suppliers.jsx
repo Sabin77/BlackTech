@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { RadialChart } from "./RadialChart";
 import { RadialGraph } from "./RadialChart2";
-import axios from "axios";
+import axios from "../../config/axiosConfig";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaEdit } from "react-icons/fa";
 import DeleteSupplier from "./DeleteSupplier";
@@ -59,12 +59,7 @@ function Suppliers() {
   const getallsuppliers = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/supplier/getallsuppliers",
-        {
-          headers: {
-            Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
-          },
-        }
+        "http://localhost:5000/api/supplier/getallsuppliers"
       );
       setSuppliers(response.data);
       // console.log(response.data);

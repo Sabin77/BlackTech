@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import "../../App.css";
 import axios from "axios";
 import Combobox from "react-widgets/Combobox";
+import { Check, ChevronsUpDown } from "lucide-react"
 import "react-widgets/styles.css";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+
+
+
 
 function AddProduct({ closeModal, updateData }) {
   const [supplierName, setSupplierName] = useState([]);
@@ -33,12 +37,14 @@ function AddProduct({ closeModal, updateData }) {
   const [errorMsg, setErrorMsg] = useState();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
+
   const getallnames = async () => {
     try {
       const response = await axios.get(
         "http://localhost:5000/api/supplier/getallnames"
       );
       setSupplierName(response.data);
+      
     } catch (error) {
       console.error(error.message);
     }
@@ -187,8 +193,9 @@ function AddProduct({ closeModal, updateData }) {
               <Label htmlFor="supplierName" className="pl-2 text-[15px]">
                 Supplier Name
               </Label>
+              
               <Combobox
-                className="w-[300px]"
+                className="w-[300px] combobox-container"
                 data={supplierName}
                 textField="name"
                 renderListItem={({ item }) => (
