@@ -23,9 +23,6 @@ function EditStockIn({ stock, closeEdit }) {
   const [productDetails, setProductDetails] = useState([]);
   const [supplierName, setSupplierName] = useState([]);
   const [stockInDetails, setStockInDetails] = useState({
-    productId: "",
-    productName: "",
-    productImage: "",
     supplierName: "",
     quantity_in: "",
     price: "",
@@ -61,9 +58,6 @@ function EditStockIn({ stock, closeEdit }) {
   useEffect(() => {
     if (stock) {
       setStockInDetails({
-        productId: stock.productId || "",
-        productName: stock.productName || "",
-        productImage: stock.productImage || "",
         supplierName: stock.supplierName || "",
         quantity_in: stock.quantity_in || "",
         price: stock.price || "",
@@ -90,9 +84,6 @@ function EditStockIn({ stock, closeEdit }) {
     console.log("handleSubmit triggered");
 
     const data = {
-      productId: stockInDetails.productId,
-      productName: stockInDetails.productName,
-      productImage: stockInDetails.productImage,
       supplierName: stockInDetails.supplierName,
       quantity_in: stockInDetails.quantity_in,
       price: stockInDetails.price,
@@ -148,14 +139,6 @@ function EditStockIn({ stock, closeEdit }) {
                 )}
                 filter="contains"
                 value={stock.productName}
-                onChange={(value) =>
-                  setStockInDetails({
-                    ...stockInDetails,
-                    productId: value._id,
-                    productName: value.name,
-                    productImage: value.productImage,
-                  })
-                }
               />
             </div>
 

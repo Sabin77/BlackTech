@@ -38,6 +38,7 @@ import EditProduct from "./EditProduct";
 import DeleteProduct from "./DeleteProduct";
 import DefaultImg from "../../assets/default_shoes.png";
 import AddStockOut from "./AddStockOut";
+import StockOutDetails from "./StockOutDetails";
 
 function StockOut() {
   const [stockOut, setStockOut] = useState([]);
@@ -54,7 +55,7 @@ function StockOut() {
 
   const closeModal = () => setShowModal(false);
 
-  const getallsuppliers = async () => {
+  const getallstockout = async () => {
     try {
       const response = await axios.get(
         "http://localhost:5000/api/stock/getallstockout",
@@ -64,7 +65,20 @@ function StockOut() {
           },
         }
       );
-      // setProducts(response.data);
+
+      const groupedStockOut = response.data.reduce((acc, item) => {
+        const existingProduct = acc.find(
+          (product) => product.productName === item.productName
+        );
+        if (existingProduct) {
+          existingProduct.quantity_out += item.quantity_out;
+        } else {
+          acc.push({ ...item });
+        }
+        return acc;
+      }, []);
+
+      setStockOut(groupedStockOut);
       // console.log(response.data);
     } catch (error) {
       console.error(error);
@@ -72,11 +86,11 @@ function StockOut() {
   };
 
   useEffect(() => {
-    getallsuppliers();
+    getallstockout();
   }, [showEdit, showDelete]);
 
-  const handleDetailsClick = (product) => {
-    setSelectedProduct(product);
+  const handleRowClick = (stockIn) => {
+    setSelectedProduct(stockIn);
     setShowDetails(true);
   };
 
@@ -143,7 +157,7 @@ function StockOut() {
     },
 
     {
-      accessorKey: "name",
+      accessorKey: "productName",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -154,7 +168,7 @@ function StockOut() {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="capitalize ml-4">{row.getValue("name")}</div>
+        <div className="capitalize ml-4">{row.getValue("productName")}</div>
       ),
     },
     {
@@ -163,52 +177,6 @@ function StockOut() {
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue("quantity_out")}</div>
       ),
-    },
-
-    {
-      accessorKey: "price",
-      header: "Price",
-      cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("price")}</div>
-      ),
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const payment = row.original;
-
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => handleDetailsClick(row.original)}
-              >
-                View Details
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem onClick={() => handleEditClick(row.original)}>
-                Edit
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                onClick={() => handleDeleteClick(row.original)}
-                className=" text-red-500"
-              >
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
     },
   ];
 
@@ -235,124 +203,133 @@ function StockOut() {
   return (
     <div className=" flex flex-col space-y-4 ">
       <div className=" bg-white h-screen m-4 p-4 rounded-md">
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Filter product..."
-            value={table.getColumn("name")?.getFilterValue() ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
+        {showDetails && selectedProduct ? (
+          <StockOutDetails
+            stockOut={selectedProduct}
+            closeDetails={() => setSelectedProduct(null)}
           />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
+        ) : (
+          <>
+            <div className="flex items-center py-4">
+              <Input
+                placeholder="Filter product..."
+                value={table.getColumn("productName")?.getFilterValue() ?? ""}
+                onChange={(event) =>
+                  table
+                    .getColumn("productName")
+                    ?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Columns <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
 
-            <AddStockOut closeModal={closeModal} updateData={getallsuppliers} />
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
+                <AddStockOut
+                  closeModal={closeModal}
+                  updateData={getallstockout}
+                />
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      );
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="rounded-md border">
+              <Table>
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => {
+                        return (
+                          <TableHead key={header.id}>
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </TableHead>
+                        );
+                      })}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && "selected"}
+                        onClick={() => handleRowClick(row.original)}
+                        className="cursor-pointer"
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
                             )}
-                      </TableHead>
-                    );
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="h-24 text-center"
+                      >
+                        No results.
                       </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-        <div className="flex items-center justify-end space-x-2 py-4">
-          <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-          <div className="space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
-        {showDetails && (
-          <ProductDetails
-            showDetails={showDetails}
-            product={selectedProduct}
-            closeDetails={closeDetails}
-          />
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+            <div className="flex items-center justify-end space-x-2 py-4">
+              <div className="flex-1 text-sm text-muted-foreground">
+                {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                {table.getFilteredRowModel().rows.length} row(s) selected.
+              </div>
+              <div className="space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
+          </>
         )}
 
         {showEdit && (
@@ -363,9 +340,9 @@ function StockOut() {
           />
         )}
         {showDelete && (
-          <DeleteProduct
+          <DeleteStockIn
             showDelete={showDelete}
-            product={selectedProduct}
+            stock={selectedProduct}
             closeDelete={closeDelete}
           />
         )}

@@ -1,79 +1,71 @@
-"use client";
+import { useEffect, useState } from "react";
+import { Bar, BarChart, CartesianGrid, XAxis, Tooltip } from "recharts";
+import { format } from "date-fns";
+import axios from "axios"; // Import axios
 
-import React from "react";
-import { TrendingUp } from "lucide-react";
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+export default function ProductLineChart() {
+  const [chartData, setChartData] = useState([]);
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+  // Fetch data from the API
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Fetch stock-in and stock-out data using axios
+        const stockInResponse = await axios.get(
+          "https://your-api-endpoint.com/stock-in"
+        );
+        const stockOutResponse = await axios.get(
+          "https://your-api-endpoint.com/stock-out"
+        );
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
+        const stockInData = stockInResponse.data;
+        const stockOutData = stockOutResponse.data;
 
-const chartConfig = {
-  desktop: {
-    label: "Active",
-    color: "#63aa86",
-  },
-};
+        // Process the stock-in data
+        const stockInFormatted = stockInData.map((item) => ({
+          day: format(new Date(item.date), "EEEE"), // Get the day of the week
+          quantity_in: item.quantity_in,
+        }));
 
-export default function CustomerLineChart() {
+        // Process the stock-out data
+        const stockOutFormatted = stockOutData.map((item) => ({
+          day: format(new Date(item.date), "EEEE"),
+          quantity_out: item.quantity_out,
+        }));
+
+        // Combine stock-in and stock-out data by weekday
+        const combinedData = stockInFormatted.map((stockInItem) => {
+          const stockOutItem = stockOutFormatted.find(
+            (outItem) => outItem.day === stockInItem.day
+          );
+
+          return {
+            day: stockInItem.day,
+            quantity_in: stockInItem.quantity_in,
+            quantity_out: stockOutItem ? stockOutItem.quantity_out : 0,
+          };
+        });
+
+        setChartData(combinedData);
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Product Sold</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <LineChart data={chartData} margin={{ left: 12, right: 12 }}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Line
-              dataKey="desktop"
-              type="linear"
-              stroke="#63aa86"
-              strokeWidth={2}
-              dot={false}
-            />
-          </LineChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div>
-      </CardFooter>
-    </Card>
+    <div className="stock-chart">
+      <h2>Stock In and Stock Out</h2>
+      <p>Stock changes by weekday</p>
+      <BarChart width={600} height={300} data={chartData}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="day" />
+        <Tooltip />
+        <Bar dataKey="quantity_in" fill="#8884d8" />
+        <Bar dataKey="quantity_out" fill="#82ca9d" />
+      </BarChart>
+    </div>
   );
 }

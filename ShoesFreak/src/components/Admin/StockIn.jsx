@@ -36,7 +36,7 @@ import DefaultImg from "../../assets/default_shoes.png";
 import AddStockIn from "./AddStockIn";
 import StockInDetails from "./StockInDetails";
 import EditStockIn from "./EditStockIn";
-import DeleteStockIn from "./DeleteStockIn";
+import DeleteStockIn from "./DeleteStock";
 
 function StockIn() {
   const [stockIn, setStockIn] = useState([]);

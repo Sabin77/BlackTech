@@ -35,7 +35,7 @@ import {
 
 import { IoIosArrowBack } from "react-icons/io";
 import EditStockIn from "./EditStockIn";
-import DeleteStockIn from "./DeleteStockIn";
+import DeleteStockIn from "./DeleteStock";
 
 function StockInDetails({ stockIn, closeDetails }) {
   const [stockInHistory, setStockInHistory] = useState([]);
@@ -236,7 +236,7 @@ function StockInDetails({ stockIn, closeDetails }) {
             </div>
             <div className=" text-center flex-1 text-2xl self-center">
               {" "}
-              Stock-In details
+              {stockIn.productName}
             </div>
           </div>
 
@@ -356,6 +356,7 @@ function StockInDetails({ stockIn, closeDetails }) {
           {showDetails && (
             <SingleStockDetails
               showDetails={showDetails}
+              getstockDetails="getstockindetails"
               stock={selectedStock}
               closeDetails={closeSingleDetails}
             />
@@ -371,6 +372,7 @@ function StockInDetails({ stockIn, closeDetails }) {
           {showDelete && (
             <DeleteStockIn
               showDelete={showDelete}
+              delstock="deletestockin"
               stock={selectedStock}
               closeDelete={closeDelete}
             />

@@ -31,6 +31,7 @@ function AddStockIn({ closeModal, updateData }) {
     supplierName: "",
 
     quantity_in: "",
+    availableQuantity: "",
     price: "",
   });
 
@@ -83,13 +84,14 @@ function AddStockIn({ closeModal, updateData }) {
       supplierId: stockInDetails.supplierId,
       supplierName: stockInDetails.supplierName,
       quantity_in: stockInDetails.quantity_in,
+      availableQuantity: stockInDetails.quantity_in,
       price: stockInDetails.price,
     };
     // console.log(data);
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/stock/addstock",
+        "http://localhost:5000/api/stock/addstockin",
         data,
         {
           headers: {
