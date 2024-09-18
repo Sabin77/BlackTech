@@ -1,3 +1,4 @@
+const { required } = require("khalti-checkout-web");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
@@ -33,6 +34,11 @@ const StockInSchema = new Schema({
   },
 
   quantity_in: {
+    type: Number,
+    required: true,
+  },
+
+  availableQuantity: {
     type: Number,
     required: true,
   },

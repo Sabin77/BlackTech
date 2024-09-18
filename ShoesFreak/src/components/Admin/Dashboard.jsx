@@ -23,6 +23,9 @@ import CustomerBar from "./ProductBarChart";
 import StockIn from "./StockIn";
 import StockOut from "./StockOut";
 import { Outlet } from "react-router-dom";
+import ProductLineChart from "./ProductLineChart";
+import ProductBar from "./ProductBarChart";
+import ProductGraph from "./ProductGraph";
 
 function Dashboard() {
   const [selectedOption, setSelectedOption] = useState("Dashboard");
@@ -234,14 +237,14 @@ function Dashboard() {
                 <TabsContent value="product" className=" h-[1000px]">
                   <div className="flex flex-col space-y-4 m-4">
                     <div className=" rounded-lg shadow-md">
-                      <CustomerGraph />
+                      <ProductGraph />
                     </div>
                     <div className=" flex space-x-4">
                       <div className="w-1/3 rounded-lg shadow-md">
-                        <CustomerBar />
+                        <ProductBar />
                       </div>
                       <div className=" w-1/3 rounded-lg shadow-md ">
-                        <CustomerLineChart />
+                        {/* <ProductLineChart /> */}
                       </div>
                     </div>
                   </div>

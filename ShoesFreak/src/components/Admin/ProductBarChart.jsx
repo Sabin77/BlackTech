@@ -51,7 +51,7 @@ const chartConfig = {
   },
 };
 
-export default function CustomerBar() {
+export default function ProductBar() {
   return (
     <Card>
       <CardHeader>
