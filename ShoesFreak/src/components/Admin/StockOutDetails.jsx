@@ -32,11 +32,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import NepaliDate from "nepali-date-converter";
 import { IoIosArrowBack } from "react-icons/io";
 import EditStockIn from "./EditStockIn";
 import DeleteStockIn from "./DeleteStock";
 import EditStockOut from "./EditStockOut";
+import { IoIosArrowForward } from "react-icons/io";
 
 function StockOutDetails({ stockOut, closeDetails }) {
   const [stockOutHistory, setStockOutHistory] = useState([]);
@@ -50,6 +51,12 @@ function StockOutDetails({ stockOut, closeDetails }) {
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
+
+  const [dateFormat, setDateFormat] = useState("Date (A.D)");
+
+  const handleDateChange = (event) => {
+    setDateFormat(event.target.value);
+  };
 
   const getStockInHistory = async () => {
     try {
@@ -73,6 +80,27 @@ function StockOutDetails({ stockOut, closeDetails }) {
       getStockInHistory();
     }
   }, [stockOut, showEdit, showDelete]);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const englishDate = new Date(dateString);
+    const nepaliDate = new NepaliDate(englishDate);
+
+    if (dateFormat === "Date (A.D)") {
+      return englishDate.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+    } else {
+      // Get Nepali month name and format the date as "Month Day, Year"
+      const nepaliMonthName = nepaliDate.format("MMMM"); // Get full Nepali month name
+      const nepaliDay = nepaliDate.getDate();
+      const nepaliYear = nepaliDate.getYear();
+
+      return `${nepaliMonthName} ${nepaliDay}, ${nepaliYear}`;
+    }
+  };
 
   const handleDetailsClick = (stockOut) => {
     setSelectedStock(stockOut);
@@ -165,6 +193,29 @@ function StockOutDetails({ stockOut, closeDetails }) {
     },
 
     {
+      accessorKey: "date",
+      header: () => (
+        <div className="">
+          {" "}
+          <label htmlFor="dateDropdown">Date </label>
+          <select
+            id="dateDropdown"
+            value={dateFormat}
+            onChange={handleDateChange}
+          >
+            <option value="Date (A.D)"> (A.D)</option>
+            <option value="Date (B.S)"> (B.S)</option>
+          </select>
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="capitalize text-center">
+          {formatDate(row.getValue("date"))}
+        </div>
+      ),
+    },
+
+    {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
@@ -230,7 +281,7 @@ function StockOutDetails({ stockOut, closeDetails }) {
         <div className=" bg-white  m-4  rounded-md">
           <div className=" flex items-center -mt-3 mb-3 ">
             <div
-              className=" flex  items-center  w-fit text-gray-600 cursor-pointer hover:underline "
+              className=" flex  items-center flex-1  w-fit text-gray-600 cursor-pointer hover:underline "
               onClick={closeDetails}
             >
               <IoIosArrowBack /> <p className=" text-sm">Back</p>
@@ -238,6 +289,14 @@ function StockOutDetails({ stockOut, closeDetails }) {
             <div className=" text-center flex-1 text-2xl self-center">
               {" "}
               {stockOut.productName}
+            </div>
+
+            <div className=" flex  items-center flex-1 justify-end text-gray-500 ">
+              Products
+              <IoIosArrowForward className=" text-xl " />
+              Stock-Out
+              <IoIosArrowForward className=" text-xl " />
+              Stock-Out History
             </div>
           </div>
 

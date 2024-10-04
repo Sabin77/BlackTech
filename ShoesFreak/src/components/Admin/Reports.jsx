@@ -3,6 +3,7 @@ import { GiCrossedBones } from "react-icons/gi";
 import axios from "axios";
 import defaultImg from "../../assets/default_shoes.png";
 import SingleStockDetails from "./SingleStockDetails";
+
 import {
   useReactTable,
   getCoreRowModel,
@@ -32,14 +33,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import NepaliDate from "nepali-date-converter";
+
 import { IoIosArrowBack } from "react-icons/io";
 import EditStockIn from "./EditStockIn";
 import DeleteStockIn from "./DeleteStock";
-import { IoIosArrowForward } from "react-icons/io";
 
-function StockInDetails({ stockIn, closeDetails }) {
-  const [stockInHistory, setStockInHistory] = useState([]);
+function Reports() {
+  const [reports, setReports] = useState([]);
+  const [stockQuantities, setStockQuantities] = useState([]);
+  const [totalStockIn, setTotalStockIn] = useState(0);
+  const [totalStockOut, setTotalStockOut] = useState(0);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -50,81 +53,48 @@ function StockInDetails({ stockIn, closeDetails }) {
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
-  const [dateFormat, setDateFormat] = useState("Date (A.D)");
 
-  const handleDateChange = (event) => {
-    setDateFormat(event.target.value);
-  };
-
-  const getStockInHistory = async () => {
+  const getReports = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/stock/getstockinhistory/${stockIn.productId}`, // Adjust the endpoint if needed
+      const stockQuantitiesDetails = await axios.get(
+        `http://localhost:5000/api/stock/getstockquantities`,
         {
           headers: {
             Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
           },
         }
       );
-      setStockInHistory(response.data);
-      console.log("Stock history retrieved successfully");
+
+      const formattedStockQuantities =
+        stockQuantitiesDetails.data.products.reduce((acc, item) => {
+          const existingProduct = acc.find(
+            (product) => product.productName === item.productName
+          );
+          if (existingProduct) {
+            existingProduct.stockIn += item.stockIn;
+          } else {
+            acc.push({ ...item });
+          }
+          return acc;
+        }, []);
+
+      setStockQuantities(formattedStockQuantities);
     } catch (error) {
       setErrorMsg(error.message);
     }
   };
 
   useEffect(() => {
-    if (stockIn?.productId) {
-      getStockInHistory();
-    }
-  }, [stockIn, showEdit, showDelete]);
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const englishDate = new Date(dateString);
-    const nepaliDate = new NepaliDate(englishDate);
-
-    if (dateFormat === "Date (A.D)") {
-      return englishDate.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-    } else {
-      // Get Nepali month name and format the date as "Month Day, Year"
-      const nepaliMonthName = nepaliDate.format("MMMM"); // Get full Nepali month name
-      const nepaliDay = nepaliDate.getDate();
-      const nepaliYear = nepaliDate.getYear();
-
-      return `${nepaliMonthName} ${nepaliDay}, ${nepaliYear}`;
-    }
-  };
+    getReports();
+  }, []);
 
   const handleDetailsClick = (stockIn) => {
     setSelectedStock(stockIn);
     setShowDetails(true);
   };
 
-  const handleEditClick = (stockIn) => {
-    setSelectedStock(stockIn);
-    setShowEdit(true);
-  };
-
-  const handleDeleteClick = (stockIn) => {
-    setSelectedStock(stockIn);
-    setShowDelete(true);
-  };
-
-  const closeSingleDetails = () => {
-    setShowDetails(false);
-  };
-
-  const closeEdit = () => {
+  const closeReports = () => {
     setShowEdit(false);
-  };
-
-  const closeDelete = () => {
-    setShowDelete(false);
   };
 
   const columns = [
@@ -153,107 +123,34 @@ function StockInDetails({ stockIn, closeDetails }) {
       enableHiding: false,
     },
     {
-      accessorKey: "batch_id",
-      header: " Batch Id",
+      accessorKey: "productName",
+      header: " Product Name",
       cell: ({ row }) => (
         <div className="capitalize text-center ">
-          {row.getValue("batch_id")}
+          {row.getValue("productName")}
         </div>
       ),
     },
 
     {
-      accessorKey: "supplierName",
-      header: "Supplier Name",
+      accessorKey: "stockIn",
+      header: "Stock In",
       cell: ({ row }) => (
-        <div className="capitalize text-center">
-          {row.getValue("supplierName")}
-        </div>
+        <div className="capitalize text-center">{row.getValue("stockIn")}</div>
       ),
     },
 
     {
-      accessorKey: "quantity_in",
-      header: "Quantity In",
+      accessorKey: "stockOut",
+      header: "Stock Out",
       cell: ({ row }) => (
-        <div className="capitalize text-center">
-          {row.getValue("quantity_in")}
-        </div>
+        <div className="capitalize text-center">{row.getValue("stockOut")}</div>
       ),
-    },
-
-    {
-      accessorKey: "price",
-      header: "Unit Price",
-      cell: ({ row }) => (
-        <div className="capitalize text-center">{row.getValue("price")}</div>
-      ),
-    },
-    {
-      accessorKey: "date",
-      header: () => (
-        <div className="">
-          {" "}
-          <label htmlFor="dateDropdown">Date </label>
-          <select
-            id="dateDropdown"
-            value={dateFormat}
-            onChange={handleDateChange}
-          >
-            <option value="Date (A.D)"> (A.D)</option>
-            <option value="Date (B.S)"> (B.S)</option>
-          </select>
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="capitalize text-center">
-          {formatDate(row.getValue("date"))}
-        </div>
-      ),
-    },
-
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const payment = row.original;
-
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => handleDetailsClick(row.original)}
-              >
-                View Details
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem onClick={() => handleEditClick(row.original)}>
-                Edit
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                onClick={() => handleDeleteClick(row.original)}
-                className=" text-red-500"
-              >
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
     },
   ];
 
   const table = useReactTable({
-    data: stockInHistory,
+    data: stockQuantities,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -275,35 +172,27 @@ function StockInDetails({ stockIn, closeDetails }) {
   return (
     <>
       <div className=" flex flex-col space-y-4 ">
-        <div className=" bg-white  m-4  rounded-md">
-          <div className=" flex items-center -mt-3 mb-3 ">
-            <div
-              className=" flex  items-center flex-1  w-fit text-gray-600 cursor-pointer hover:underline "
+        <div className=" bg-white  m-4 p-4  rounded-md">
+          <div className=" flex items-center  mb-3 ">
+            {/* <div
+              className=" flex  items-center  w-fit text-gray-600 cursor-pointer hover:underline "
               onClick={closeDetails}
             >
               <IoIosArrowBack /> <p className=" text-sm">Back</p>
-            </div>
+            </div> */}
             <div className=" text-center flex-1 text-2xl self-center">
               {" "}
-              {stockIn.productName}
-            </div>
-
-            <div className=" flex  items-center flex-1 justify-end text-gray-500 ">
-              Products
-              <IoIosArrowForward className=" text-xl " />
-              Stock-In
-              <IoIosArrowForward className=" text-xl " />
-              Stock-In History
+              Stock Reports
             </div>
           </div>
 
           <div className="flex items-center py-4">
             <Input
               placeholder="Filter supplier..."
-              value={table.getColumn("supplierName")?.getFilterValue() ?? ""}
+              value={table.getColumn("productName")?.getFilterValue() ?? ""}
               onChange={(event) =>
                 table
-                  .getColumn("supplierName")
+                  .getColumn("productName")
                   ?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
@@ -410,34 +299,10 @@ function StockInDetails({ stockIn, closeDetails }) {
               </Button>
             </div>
           </div>
-          {showDetails && (
-            <SingleStockDetails
-              showDetails={showDetails}
-              getstockDetails="getstockindetails"
-              stock={selectedStock}
-              closeDetails={closeSingleDetails}
-            />
-          )}
-
-          {showEdit && (
-            <EditStockIn
-              showEdit={showEdit}
-              stock={selectedStock}
-              closeEdit={closeEdit}
-            />
-          )}
-          {showDelete && (
-            <DeleteStockIn
-              showDelete={showDelete}
-              delstock="deletestockin"
-              stock={selectedStock}
-              closeDelete={closeDelete}
-            />
-          )}
         </div>
       </div>
     </>
   );
 }
 
-export default StockInDetails;
+export default Reports;

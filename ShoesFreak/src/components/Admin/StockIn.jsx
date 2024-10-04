@@ -37,6 +37,7 @@ import AddStockIn from "./AddStockIn";
 import StockInDetails from "./StockInDetails";
 import EditStockIn from "./EditStockIn";
 import DeleteStockIn from "./DeleteStock";
+import { IoIosArrowForward } from "react-icons/io";
 
 function StockIn() {
   const [stockIn, setStockIn] = useState([]);
@@ -76,7 +77,7 @@ function StockIn() {
       }, []);
 
       setStockIn(groupedStockIn);
-      // console.log(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -374,7 +375,6 @@ function StockIn() {
             </div>
           </>
         )}
-
         {showEdit && (
           <EditStockIn
             showEdit={showEdit}

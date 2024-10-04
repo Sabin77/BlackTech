@@ -26,17 +26,21 @@ function Login() {
     e.preventDefault();
     const { email, password } = userDetails;
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", userDetails, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        userDetails,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       console.log("Login Successfull");
       const role = response.data.role;
       const token = response.data.authToken;
-      console.log(response.data.authToken);
-      
+      console.log(response.data);
+
       localStorage.setItem("token", token);
 
       localStorage.setItem("role", role);

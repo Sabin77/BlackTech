@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { GiCrossedBones } from "react-icons/gi";
 import axios from "axios";
 import defaultImg from "../../assets/default_shoes.png";
+import NepaliDate from "nepali-date-converter";
 
 function SingleStockDetails({ getstockDetails, stock, closeDetails }) {
   const [stockDetails, setStockDetails] = useState([]);
@@ -26,10 +27,19 @@ function SingleStockDetails({ getstockDetails, stock, closeDetails }) {
     }
   };
 
-  const formatDate = (dateString) => {
+  const convertToNepaliDate = (dateString) => {
     if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toISOString().split("T")[0]; // Extract the YYYY-MM-DD part
+
+    const englishDate = new Date(dateString); // Convert to JS Date object
+    const nepaliDate = new NepaliDate(englishDate); // Convert to NepaliDate object
+
+    // Get the day, month, and year from the Nepali date
+    const day = nepaliDate.getDate(); // Day number
+    const month = nepaliDate.format("MMMM"); // Full Nepali month name
+    const year = nepaliDate.getYear(); // Nepali year
+
+    // Return formatted string in "Bhadra 23, 2081" format
+    return `${month} ${day}, ${year}`;
   };
 
   useEffect(() => {
@@ -90,7 +100,7 @@ function SingleStockDetails({ getstockDetails, stock, closeDetails }) {
               <div className=" flex flex-1  flex-col pl-5 mx-2 h-16">
                 <label> Date</label>
                 <p className=" text-gray-500">
-                  {formatDate(stockDetails.date)}
+                  {convertToNepaliDate(stockDetails.date)}
                 </p>
               </div>
             </div>
