@@ -17,15 +17,17 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-function EditStockIn({ stock, closeEdit }) {
+function EditStockOut({ stock, closeEdit }) {
   console.log("Received stock:", stock);
 
   const [productDetails, setProductDetails] = useState([]);
   const [supplierName, setSupplierName] = useState([]);
-  const [stockInDetails, setStockInDetails] = useState({
-    supplierName: "",
-    quantity_in: "",
+  const [stockOutDetails, setStockOutDetails] = useState({
+    availableQuantity: "",
+    quantity_out: "",
     price: "",
+    buyerName: "",
+    buyerPhone: "",
   });
 
   const [errorMsg, setErrorMsg] = useState("");
@@ -57,13 +59,17 @@ function EditStockIn({ stock, closeEdit }) {
   // Initialize form fields with product data when component mounts
   useEffect(() => {
     if (stock) {
-      setStockInDetails({
-        supplierName: stock.supplierName || "",
-        quantity_in: stock.quantity_in || "",
+      setStockOutDetails({
+        availableQuantity: stock.availableQuantity + stock.quantity_out || 0,
+        quantity_out: stock.quantity_out || "",
         price: stock.price || "",
+        buyerName: stock.buyerName || "",
+        buyerPhone: stock.buyerPhone || "",
       });
     }
   }, [stock]);
+
+  console.log(stockOutDetails.availableQuantity);
 
   // Fetch product and supplier data on component mount
   useEffect(() => {
@@ -73,7 +79,7 @@ function EditStockIn({ stock, closeEdit }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setStockInDetails((prevDetails) => ({
+    setStockOutDetails((prevDetails) => ({
       ...prevDetails,
       [name]: value,
     }));
@@ -84,16 +90,22 @@ function EditStockIn({ stock, closeEdit }) {
     console.log("handleSubmit triggered");
 
     const data = {
-      supplierName: stockInDetails.supplierName,
-      quantity_in: stockInDetails.quantity_in,
-      price: stockInDetails.price,
+      batch_id: stock.batch_id,
+      productId: stock.productId,
+      supplierName: stock.supplierName,
+      availableQuantity:
+        stockOutDetails.availableQuantity - stockOutDetails.quantity_out,
+      quantity_out: stockOutDetails.quantity_out,
+      price: stockOutDetails.price,
+      buyerName: stockOutDetails.buyerName,
+      buyerPhone: stockOutDetails.buyerPhone,
     };
 
     console.log("Submitting data:", data);
 
     try {
       await axios.put(
-        `http://localhost:5000/api/stock/updatestockinhistory/${stock._id}`,
+        `http://localhost:5000/api/stock/updatestockouthistory/${stock._id}`,
         data,
         {
           headers: {
@@ -112,7 +124,7 @@ function EditStockIn({ stock, closeEdit }) {
       <Sheet open={true} onOpenChange={closeEdit}>
         <SheetContent>
           <SheetHeader>
-            <SheetTitle>Edit Stock In</SheetTitle>
+            <SheetTitle>Edit Stock Out</SheetTitle>
             <SheetDescription>
               Enter the details of the stock correctly.
             </SheetDescription>
@@ -150,6 +162,7 @@ function EditStockIn({ stock, closeEdit }) {
                 className="w-[250px]"
                 data={supplierName}
                 textField="name"
+                disabled
                 renderListItem={({ item }) => (
                   <div className="flex items-center border-b-2">
                     <img
@@ -162,25 +175,31 @@ function EditStockIn({ stock, closeEdit }) {
                 )}
                 filter="contains"
                 defaultValue={stock.supplierName}
-                onChange={(value) =>
-                  setStockInDetails({
-                    ...stockInDetails,
-                    supplierId: value._id,
-                    supplierName: value.name,
-                  })
-                }
               />
             </div>
 
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="quantity_in" className="text-right">
-                Quantity In
+                Quantity Available
               </Label>
               <Input
-                id="quantity_in"
-                name="quantity_in"
+                readOnly
+                id="availableQuantity"
+                name="availableQuantity"
+                value={stockOutDetails.availableQuantity}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="quantity_in" className="text-right">
+                Quantity Out
+              </Label>
+              <Input
+                id="quantity_out"
+                name="quantity_out"
                 onChange={handleChange}
-                value={stockInDetails.quantity_in}
+                value={stockOutDetails.quantity_out}
                 className="col-span-3"
               />
             </div>
@@ -193,7 +212,33 @@ function EditStockIn({ stock, closeEdit }) {
                 id="price"
                 name="price"
                 onChange={handleChange}
-                value={stockInDetails.price}
+                value={stockOutDetails.price}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="price" className="text-right">
+                Buyer Name
+              </Label>
+              <Input
+                id="buyerName"
+                name="buyerName"
+                onChange={handleChange}
+                value={stockOutDetails.buyerName}
+                className="col-span-3"
+              />
+            </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="price" className="text-right">
+                Buyer Phone
+              </Label>
+              <Input
+                id="buyerPhone"
+                name="buyerPhone"
+                onChange={handleChange}
+                value={stockOutDetails.buyerPhone}
                 className="col-span-3"
               />
             </div>
@@ -214,4 +259,4 @@ function EditStockIn({ stock, closeEdit }) {
   );
 }
 
-export default EditStockIn;
+export default EditStockOut;

@@ -3,21 +3,21 @@ import { GiCrossedBones } from "react-icons/gi";
 import axios from "axios";
 import defaultImg from "../../assets/default_shoes.png";
 
-function SingleStockDetails({ stock, closeDetails }) {
-  const [stockInDetails, setStockInDetails] = useState([]);
+function SingleStockDetails({ getstockDetails, stock, closeDetails }) {
+  const [stockDetails, setStockDetails] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const getStockInDetails = async (e) => {
+  const getStockDetails = async (e) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/stock/getstockindetails/${stock._id}`,
+        `http://localhost:5000/api/stock/${getstockDetails}/${stock._id}`,
         {
           headers: {
             Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
           },
         }
       );
-      setStockInDetails(response.data);
+      setStockDetails(response.data);
       console.log(response.data);
 
       console.log("Stock found Successfully");
@@ -33,7 +33,7 @@ function SingleStockDetails({ stock, closeDetails }) {
   };
 
   useEffect(() => {
-    getStockInDetails();
+    getStockDetails();
   }, [stock]);
 
   return (
@@ -53,8 +53,8 @@ function SingleStockDetails({ stock, closeDetails }) {
             <div className=" -mt-4">
               <img
                 src={
-                  stockInDetails.productImage
-                    ? stockInDetails.productImage
+                  stockDetails.productImage
+                    ? stockDetails.productImage
                     : defaultImg
                 }
                 alt="image"
@@ -62,27 +62,27 @@ function SingleStockDetails({ stock, closeDetails }) {
               />
               <h1 className=" text-center text-xl">
                 {" "}
-                {stockInDetails.productName}
+                {stockDetails.productName}
               </h1>
             </div>
 
             <div className=" flex  w-full">
               <div className=" flex flex-col pl-5  mx-2 h-16">
                 <label> Supplier Name</label>
-                <p className=" text-gray-500">{stockInDetails.supplierName}</p>
+                <p className=" text-gray-500">{stockDetails.supplierName}</p>
               </div>
             </div>
 
             <div className=" flex  w-full">
               <div className=" flex  flex-1 flex-col pl-5  mx-2 h-16">
                 <label> Quantity In</label>
-                <p className=" text-gray-500">{stockInDetails.quantity_in}</p>
+                <p className=" text-gray-500">{stockDetails.quantity_in}</p>
               </div>
             </div>
             <div className=" flex  w-full">
               <div className=" flex flex-1  flex-col pl-5 mx-2 h-16">
                 <label> Price</label>
-                <p className=" text-gray-500">{stockInDetails.price}</p>
+                <p className=" text-gray-500">{stockDetails.price}</p>
               </div>
             </div>
 
@@ -90,7 +90,7 @@ function SingleStockDetails({ stock, closeDetails }) {
               <div className=" flex flex-1  flex-col pl-5 mx-2 h-16">
                 <label> Date</label>
                 <p className=" text-gray-500">
-                  {formatDate(stockInDetails.date)}
+                  {formatDate(stockDetails.date)}
                 </p>
               </div>
             </div>

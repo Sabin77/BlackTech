@@ -36,9 +36,10 @@ import {
 import { IoIosArrowBack } from "react-icons/io";
 import EditStockIn from "./EditStockIn";
 import DeleteStockIn from "./DeleteStock";
+import EditStockOut from "./EditStockOut";
 
-function StockInDetails({ stockIn, closeDetails }) {
-  const [stockInHistory, setStockInHistory] = useState([]);
+function StockOutDetails({ stockOut, closeDetails }) {
+  const [stockOutHistory, setStockOutHistory] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
@@ -53,38 +54,38 @@ function StockInDetails({ stockIn, closeDetails }) {
   const getStockInHistory = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/stock/getstockinhistory/${stockIn.productId}`, // Adjust the endpoint if needed
+        `http://localhost:5000/api/stock/getstockouthistory/${stockOut.productId}`, // Adjust the endpoint if needed
         {
           headers: {
             Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
           },
         }
       );
-      setStockInHistory(response.data);
-      console.log("Stock history retrieved successfully");
+      setStockOutHistory(response.data);
+      console.log("Stock history retrieved successfully", response.data);
     } catch (error) {
       setErrorMsg(error.message);
     }
   };
 
   useEffect(() => {
-    if (stockIn?.productId) {
+    if (stockOut?.productId) {
       getStockInHistory();
     }
-  }, [stockIn, showEdit, showDelete]);
+  }, [stockOut, showEdit, showDelete]);
 
-  const handleDetailsClick = (stockIn) => {
-    setSelectedStock(stockIn);
+  const handleDetailsClick = (stockOut) => {
+    setSelectedStock(stockOut);
     setShowDetails(true);
   };
 
-  const handleEditClick = (stockIn) => {
-    setSelectedStock(stockIn);
+  const handleEditClick = (stockOut) => {
+    setSelectedStock(stockOut);
     setShowEdit(true);
   };
 
-  const handleDeleteClick = (stockIn) => {
-    setSelectedStock(stockIn);
+  const handleDeleteClick = (stockOut) => {
+    setSelectedStock(stockOut);
     setShowDelete(true);
   };
 
@@ -146,11 +147,11 @@ function StockInDetails({ stockIn, closeDetails }) {
     },
 
     {
-      accessorKey: "quantity_in",
-      header: "Quantity In",
+      accessorKey: "quantity_out",
+      header: "Quantity Out",
       cell: ({ row }) => (
         <div className="capitalize text-center">
-          {row.getValue("quantity_in")}
+          {row.getValue("quantity_out")}
         </div>
       ),
     },
@@ -204,7 +205,7 @@ function StockInDetails({ stockIn, closeDetails }) {
   ];
 
   const table = useReactTable({
-    data: stockInHistory,
+    data: stockOutHistory,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -236,7 +237,7 @@ function StockInDetails({ stockIn, closeDetails }) {
             </div>
             <div className=" text-center flex-1 text-2xl self-center">
               {" "}
-              {stockIn.productName}
+              {stockOut.productName}
             </div>
           </div>
 
@@ -356,14 +357,14 @@ function StockInDetails({ stockIn, closeDetails }) {
           {showDetails && (
             <SingleStockDetails
               showDetails={showDetails}
-              getstockDetails="getstockindetails"
+              getstockDetails="getstockoutdetails"
               stock={selectedStock}
               closeDetails={closeSingleDetails}
             />
           )}
 
           {showEdit && (
-            <EditStockIn
+            <EditStockOut
               showEdit={showEdit}
               stock={selectedStock}
               closeEdit={closeEdit}
@@ -371,8 +372,8 @@ function StockInDetails({ stockIn, closeDetails }) {
           )}
           {showDelete && (
             <DeleteStockIn
+              delstock="deletestockout"
               showDelete={showDelete}
-              delstock="deletestockin"
               stock={selectedStock}
               closeDelete={closeDelete}
             />
@@ -383,4 +384,4 @@ function StockInDetails({ stockIn, closeDetails }) {
   );
 }
 
-export default StockInDetails;
+export default StockOutDetails;
