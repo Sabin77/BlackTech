@@ -26,19 +26,98 @@ import { Outlet } from "react-router-dom";
 import ProductLineChart from "./ProductLineChart";
 import ProductBar from "./ProductBarChart";
 import ProductGraph from "./ProductGraph";
+import Reports from "./Reports";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 function Dashboard() {
+  const [user, setUser] = useState("");
   const [selectedOption, setSelectedOption] = useState("Dashboard");
-
+  const [totalStockIn, setTotalStockIn] = useState(0);
+  const [totalStockOut, setTotalStockOut] = useState(0);
+  const [recentSales, setRecentSales] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [selectedSupplier, setSelectedSupplier] = useState(null);
 
-  const closeModal = () => setShowModal(false);
-  const closeEdit = () => setShowEdit(false);
-  const closeDelete = () => setShowDelete(false);
+  useEffect(async () => {
+    const getUserDetails = await axios.get(
+      `http://localhost:5000/api/auth/getuser`, // Adjust the endpoint if needed
+      {
+        headers: {
+          Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
+        },
+      }
+    );
+    setUser(response.data);
+    console.log(response.data);
+  }, []);
+
+  const getStockDetails = async () => {
+    try {
+      const stockIn = await axios.get(
+        `http://localhost:5000/api/stock/getallstockin`, // Adjust the endpoint if needed
+        {
+          headers: {
+            Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
+          },
+        }
+      );
+
+      const stockOut = await axios.get(
+        `http://localhost:5000/api/stock/getallstockout`, // Adjust the endpoint if needed
+        {
+          headers: {
+            Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
+          },
+        }
+      );
+
+      // setReports(stockIn.data);
+
+      // Calculate total stock-in and stock-out quantities
+      const totalStockIn = stockIn.data.reduce(
+        (total, record) => total + record.quantity_in,
+        0
+      );
+      const totalStockOut = stockOut.data.reduce(
+        (total, record) => total + record.quantity_out,
+        0
+      );
+
+      setTotalStockIn(totalStockIn);
+      // console.log(totalStockIn);
+
+      setTotalStockOut(totalStockOut);
+      // console.log(totalStockOut);
+    } catch (error) {
+      setErrorMsg(error.message);
+    }
+  };
+
+  const getLastMonthSales = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/stock/getstockoutlastmonth",
+        {
+          headers: {
+            Authorization: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjZiMGE3ZTJkY2RkODYyOTVlOTY2ZWM0In0sImlhdCI6MTcyMjg1NTAxNH0.vtAmibJS7KNCGsVjLRINsJkjEJg2T6u4Bxp-WjBpIls`,
+          },
+        }
+      );
+      setRecentSales(response.data);
+
+      // console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const getallsuppliers = async () => {
     try {
@@ -58,18 +137,10 @@ function Dashboard() {
   };
 
   useEffect(() => {
+    getLastMonthSales();
     getallsuppliers();
+    getStockDetails();
   }, [showModal, showEdit, showDelete]);
-
-  const handleEditClick = (supplier) => {
-    setSelectedSupplier(supplier);
-    setShowEdit(true);
-  };
-
-  const handleDeleteClick = (supplier) => {
-    setSelectedSupplier(supplier);
-    setShowDelete(true);
-  };
 
   const renderContent = () => {
     switch (selectedOption) {
@@ -107,7 +178,7 @@ function Dashboard() {
                   <IoArrowDownOutline className="absolute right-3 text-2xl" />
                 </div>
                 <div className="  h-14">
-                  <p className="text-3xl font-bold">300</p>
+                  <p className="text-3xl font-bold">{totalStockIn}</p>
                   <p className=" text-sm py-1">+20.1% from last month</p>
                 </div>
               </div>
@@ -119,91 +190,54 @@ function Dashboard() {
                   <IoArrowUpOutline className="absolute right-3 text-2xl" />
                 </div>
                 <div className="  h-14">
-                  <p className="text-3xl font-bold">500</p>
+                  <p className="text-3xl font-bold">{totalStockOut}</p>
                   <p className=" text-sm py-1">+30.1% from last month</p>
                 </div>
               </div>
             </div>
-            <div className=" flex px-4 py-1 h-fit   ">
+            <div className=" flex px-4 py-1    ">
               <div className="  w-3/5 bg-white mx-3 rounded-lg shadow-md ">
                 <Barchart />
               </div>
               <div className="   w-2/5 px-2 bg-white mx-3 rounded-lg shadow-md ">
-                <div className=" m-4 h-96">
-                  <div className="  h-16">
-                    <h1 className=" text-xl font-semibold"> Recent Sales </h1>
-                    <p className=" text-gray-500">
-                      You made 777 sales this month
-                    </p>
-                  </div>
-                  <div className=" flex items-center h-16 border-b-2 border-[#dbefe5] ">
-                    <div className=" border-2 h-10 w-10 rounded-full">
-                      {" "}
-                      <img src={defaultImg} className=" rounded-full" />
-                    </div>
-                    <div className=" flex flex-col justify-center pl-4 w-2/3 h-10">
-                      <h2 className=" font-semibold"> Sabin Lamichhane</h2>
-                      <p className=" text-sm">sabin@gmail.com</p>
-                    </div>
-                    <div className=" w-28 h-10">
-                      <p className=" text-center font-semibold"> +$5600</p>
-                    </div>
-                  </div>
-
-                  <div className=" flex items-center h-16 border-b-2 border-[#dbefe5]">
-                    <div className="border-2 h-10 w-10 rounded-full">
-                      {" "}
-                      <img src={defaultImg} className=" rounded-full" />
-                    </div>
-                    <div className=" flex flex-col justify-center pl-4 w-2/3 h-10">
-                      <h2 className=" font-semibold"> Hari Prasad</h2>
-                      <p className=" text-sm">hari@gmail.com</p>
-                    </div>
-                    <div className=" w-28 h-10">
-                      <p className=" text-center font-semibold"> +$4500</p>
-                    </div>
-                  </div>
-
-                  <div className=" flex items-center h-16 border-b-2 border-[#dbefe5]">
-                    <div className="border-2 h-10 w-10 rounded-full">
-                      {" "}
-                      <img src={defaultImg} className=" rounded-full" />
-                    </div>
-                    <div className=" flex flex-col justify-center pl-4 w-2/3 h-10">
-                      <h2 className=" font-semibold"> Ghanshyam Poudel</h2>
-                      <p className=" text-sm">poudelg@gmail.com</p>
-                    </div>
-                    <div className=" w-28 h-10">
-                      <p className=" text-center font-semibold"> +$3300</p>
-                    </div>
-                  </div>
-
-                  <div className=" flex items-center h-16 border-b-2 border-[#dbefe5]">
-                    <div className="border-2 h-10 w-10 rounded-full">
-                      {" "}
-                      <img src={defaultImg} className=" rounded-full" />
-                    </div>
-                    <div className=" flex flex-col justify-center pl-4 w-2/3 h-10">
-                      <h2 className=" font-semibold"> Santosh Gurung</h2>
-                      <p className=" text-sm">sgrg@gmail.com</p>
-                    </div>
-                    <div className=" w-28 h-10">
-                      <p className=" text-center font-semibold"> +$3000</p>
-                    </div>
-                  </div>
-
-                  <div className=" flex items-center h-16 border-b-2 border-[#dbefe5]">
-                    <div className="border-2 h-10 w-10 rounded-full">
-                      <img src={defaultImg} className=" rounded-full" />
-                    </div>
-                    <div className=" flex flex-col justify-center pl-4 w-2/3 h-10">
-                      <h2 className=" font-semibold"> Saunak Shrestha</h2>
-                      <p className=" text-sm">saunak@gmail.com</p>
-                    </div>
-                    <div className=" w-28 h-10">
-                      <p className=" text-center font-semibold"> +$2200</p>
-                    </div>
-                  </div>
+                <div className="  h-16 p-4">
+                  <h1 className=" text-xl font-semibold"> Recent Sales </h1>
+                  <p className=" text-gray-500">
+                    You made 777 sales this month
+                  </p>
+                </div>
+                <div className=" m-4  overflow-y-scroll ">
+                  {recentSales &&
+                    recentSales.map((recentSale) => {
+                      return (
+                        // Add return here
+                        <div
+                          key={recentSale._id}
+                          className="flex items-center h-16 border-b-2 border-[#dbefe5]"
+                        >
+                          <div className="border-2 h-10 w-10 rounded-full">
+                            <img
+                              src={defaultImg}
+                              alt="Buyer"
+                              className="rounded-full"
+                            />
+                          </div>
+                          <div className="flex flex-col justify-center pl-4 w-2/3 h-10">
+                            <h2 className="font-semibold">
+                              {" "}
+                              {recentSale.buyerName}
+                            </h2>
+                            <p className="text-sm">{recentSale.buyerPhone}</p>
+                          </div>
+                          <div className="w-28 h-10">
+                            <p className="text-center font-semibold">
+                              {" "}
+                              +Rs.{recentSale.price}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             </div>
@@ -262,6 +296,9 @@ function Dashboard() {
       case "Stock Out":
         return <StockOut />;
 
+      case "Report":
+        return <Reports />;
+
       case "Settings":
         return (
           <div className="m-4 p-4 bg-white rounded-lg">
@@ -291,7 +328,23 @@ function Dashboard() {
               </h1>
             </div>
             <div className=" flex flex-1  space-x-2 pr-4 flex-row-reverse items-center ">
-              <IoIosArrowDown />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <div className="">
+                    <IoIosArrowDown />
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                  <div className=" flex flex-col items-center  h-60 ">
+                    <div className=" border-2 h-28 w-28 mt-3 rounded-full"></div>
+                    <div className="">
+                      <h1>Name</h1>
+                      <p>email@email.com</p>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
               <div className=" w-8 h-8 border-2 rounded-full ">
                 <img src={defaultImg} className=" rounded-full" />
               </div>

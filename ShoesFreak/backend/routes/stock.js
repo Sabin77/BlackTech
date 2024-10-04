@@ -282,9 +282,9 @@ router.post(
 
       // Deduct the quantity_out from the quantityAvailable
       stockIn.availableQuantity -= quantity_out;
-      (availableQuantity = stockIn.availableQuantity),
-        // Save the updated stock-in entry
-        await stockIn.save();
+
+      // Save the updated stock-in entry
+      await stockIn.save();
 
       const stockOut = new StockOut({
         batch_id,
@@ -293,7 +293,7 @@ router.post(
         productImage,
         supplierId,
         supplierName,
-        availableQuantity,
+        availableQuantity: stockIn.availableQuantity,
         quantity_out,
 
         price,
@@ -528,15 +528,74 @@ router.get(
   adminMiddleware,
   async (req, res) => {
     try {
-      // Fetch stock-in data with quantity and date
-      const stockInData = await StockIn.find({}, "quantity_in date").lean();
-      // Fetch stock-out data with quantity and date
-      const stockOutData = await StockOut.find({}, "quantity_out date").lean();
+      // Fetch stock-in data with productId, productName, and quantity
+      const stockInData = await StockIn.find(
+        {},
+        "productId productName quantity_in"
+      ).lean();
 
-      res.json({
-        stockIn: stockInData,
-        stockOut: stockOutData,
+      // Fetch stock-out data with productId, productName, and quantity
+      const stockOutData = await StockOut.find(
+        {},
+        "productId quantity_out"
+      ).lean();
+
+      // Create a map of stock-out quantities by productId for fast lookup
+      const stockOutMap = stockOutData.reduce((acc, item) => {
+        acc[item.productId] = item.quantity_out;
+        return acc;
+      }, {});
+
+      // Prepare the final result combining stock-in and stock-out quantities
+      const result = stockInData.map((stockInItem) => {
+        const productId = stockInItem.productId;
+        const stockOutQuantity = stockOutMap[productId] || 0; // Default to 0 if no stock-out data exists
+        return {
+          productName: stockInItem.productName,
+          stockIn: stockInItem.quantity_in,
+          stockOut: stockOutQuantity,
+        };
       });
+
+      // Send the final result as the response
+      res.json({
+        products: result,
+      });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
+
+router.get(
+  "/getstockoutlastmonth",
+  fetchuser,
+  authMiddleware,
+  adminMiddleware,
+  async (req, res) => {
+    try {
+      // Get the current date and the date one month before
+      const today = new Date();
+      const lastMonth = new Date();
+      lastMonth.setMonth(today.getMonth() - 1);
+
+      // Find stock-out data for the last month based on the date field
+      const stockOutData = await StockOut.find({
+        date: {
+          $gte: lastMonth, // greater than or equal to lastMonth
+          $lt: today, // less than today
+        },
+      });
+
+      // Check if any data was found
+      if (stockOutData.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "No stock-out data found for the last month." });
+      }
+
+      res.json(stockOutData);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal Server Error");

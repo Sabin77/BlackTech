@@ -223,7 +223,9 @@ function AddStockOut({ closeModal, updateData }) {
               <Label htmlFor="supplierName" className=" pl-2 text-left">
                 Supplier Name
               </Label>
-              <Input readOnly id="supplierName" value={formData.supplierName} />
+              <div className=" w-56 pl-4 pt-2 text-sm">
+                {formData.supplierName}
+              </div>
             </div>
           </div>
 
@@ -232,18 +234,18 @@ function AddStockOut({ closeModal, updateData }) {
               <Label htmlFor="availableQuantity" className=" pl-2 text-left">
                 Available Quantity
               </Label>
-              <Input
-                id="availableQuantity"
-                value={formData.availableQuantity}
-                readOnly
-              />
+              <div className=" w-56 pl-4 pt-2 text-sm">
+                {formData.availableQuantity}
+              </div>
             </div>
 
             <div className=" flex flex-col  gap-2 ">
               <Label htmlFor="name" className=" pl-2 text-left">
                 Stock-In price
               </Label>
-              <Input id="stockInPrice" value={formData.stockInPrice} readOnly />
+              <div className=" w-56 pl-4 pt-2 text-sm">
+                {formData.stockInPrice}
+              </div>
             </div>
 
             <div className=" flex flex-col  gap-2 ">

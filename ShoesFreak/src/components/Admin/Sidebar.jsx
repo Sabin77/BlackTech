@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { LuUsers } from "react-icons/lu";
+import { Box } from "lucide-react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoLogOutOutline } from "react-icons/io5";
 import "../../App.css";
+import { HiOutlineDocumentReport } from "react-icons/hi";
 
 import {
   Accordion,
@@ -69,7 +71,7 @@ function Sidebar({ setSelectedOption, activeOption }) {
                 onClick={() => handleOptionClick("Products")}
               >
                 <div className=" flex">
-                  <LuUsers className="text-xl " />
+                  <Box className="text-sm " />
                   <p className="mx-2 ">Products</p>
                 </div>
               </div>
@@ -100,6 +102,16 @@ function Sidebar({ setSelectedOption, activeOption }) {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+
+        <div
+          className={`flex items-center border-4 border-white p-3 mx-1 rounded-l-lg cursor-pointer ${
+            activeOption === "Report" ? "bg-[#dbefe5] border-r-[#5FBF8F]" : ""
+          } hover:bg-[#dbefe5]`}
+          onClick={() => handleOptionClick("Report")}
+        >
+          <HiOutlineDocumentReport className="text-xl" />
+          <p className="mx-2">Reports</p>
+        </div>
 
         <div
           className={`flex items-center border-4 border-white p-3 mx-1 rounded-l-lg cursor-pointer ${
